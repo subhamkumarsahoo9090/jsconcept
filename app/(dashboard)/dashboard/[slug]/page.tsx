@@ -1,0 +1,34 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import TutorialView from "@/components/dashboard/TutorialView";
+import { readLibraries } from "@/lib/libraryStore";
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const category = (await readLibraries()).find((library) => library.slug === slug);
+  if (!category) return { title: "Library" };
+
+  return {
+    title: category.title,
+    description: category.summary,
+    robots: { index: false, follow: false },
+  };
+}
+
+export default async function TutorialPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const category = (await readLibraries()).find((library) => library.slug === slug);
+  if (!category) notFound();
+
+  return <TutorialView category={category} />;
+}

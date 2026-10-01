@@ -1,0 +1,1090 @@
+[
+  {
+    "id": "interview",
+    "slug": "interview",
+    "title": "Interview",
+    "summary": "Short interview answers for each topic, in English and in Hindi written with English letters.",
+    "accent": "#7c3aed",
+    "lessons": [
+      {
+        "id": "interview-js-scope",
+        "title": "JavaScript: let, const, and var",
+        "english": [
+          "Question: What is the difference between let, const, and var?",
+          "let and const belong to the block they are written in. var belongs to the function. const cannot be reassigned. let can. Prefer const, then let. Avoid var in new code."
+        ],
+        "hindi": [
+          "Question: let, const, aur var mein kya farq hai?",
+          "let aur const usi block mein rehte hain jahan likhe gaye hain. var function tak rehta hai. const ko dubara assign nahi kar sakte. let ko kar sakte hain. Naye code mein const, phir let. var avoid karo."
+        ],
+        "code": "",
+        "tabId": "interview-javascript"
+      },
+      {
+        "id": "interview-js-equal",
+        "title": "JavaScript: == and ===",
+        "english": [
+          "Question: Why do interviewers prefer ===?",
+          "=== checks value and type. == converts types first, so 1 == \"1\" is true and bugs hide. 1 === \"1\" is false. Use === unless you have a clear reason not to."
+        ],
+        "hindi": [
+          "Question: Interviewer === ko kyun pasand karte hain?",
+          "=== value aur type dono check karta hai. == pehle type badalta hai, isliye 1 == \"1\" true ho jata hai aur bug chhup jata hai. 1 === \"1\" false hai. Bina wajah == mat use karo."
+        ],
+        "code": "",
+        "tabId": "interview-javascript"
+      },
+      {
+        "id": "interview-react-state",
+        "title": "React: props and state",
+        "english": [
+          "Question: What is the difference between props and state?",
+          "Props come from the parent and the child should not change them. State is data the component owns. Call the setter from useState to change it. React then renders the new UI."
+        ],
+        "hindi": [
+          "Question: Props aur state mein kya farq hai?",
+          "Props parent se aate hain aur child unhe nahi badalta. State woh data hai jo component ke paas hai. Badalne ke liye useState ka setter call karo. React naya UI render karta hai."
+        ],
+        "code": "",
+        "tabId": "interview-react"
+      },
+      {
+        "id": "interview-react-keys",
+        "title": "React: why lists need keys",
+        "english": [
+          "Question: Why does a list need a key?",
+          "React uses the key to match items when the list changes. A stable id from the data is a good key. The array index is a weak key when items are inserted, moved, or deleted."
+        ],
+        "hindi": [
+          "Question: List ko key kyun chahiye?",
+          "Jab list badalti hai, React key se item pehchanta hai. Data ki stable id achhi key hai. Index kamzor key hai jab items beech mein add, move, ya delete hote hain."
+        ],
+        "code": "",
+        "tabId": "interview-react"
+      },
+      {
+        "id": "interview-node-what",
+        "title": "Node.js: what it is for",
+        "english": [
+          "Question: What is Node.js used for?",
+          "Node.js runs JavaScript outside the browser. People use it for APIs, servers, and tools. It is built on V8 and handles slow work, like the network, through an event loop instead of blocking the process."
+        ],
+        "hindi": [
+          "Question: Node.js kis kaam ke liye use hota hai?",
+          "Node.js JavaScript ko browser ke bahar chalata hai. Isse APIs, servers, aur tools bante hain. Ye V8 par bana hai. Network jaisa slow kaam event loop se hota hai, poori process rukti nahi."
+        ],
+        "code": "",
+        "tabId": "interview-node-js"
+      },
+      {
+        "id": "interview-next-server",
+        "title": "Next.js: server and client components",
+        "english": [
+          "Question: When do you add use client?",
+          "In the app router, components are server components unless the file starts with use client. Add that directive when the component needs state, effects, or browser events. Keep it as low in the tree as you can."
+        ],
+        "hindi": [
+          "Question: use client kab likhte hain?",
+          "App router mein component server component hota hai, jab tak file use client se shuru na ho. State, effects, ya browser events chahiye hon to ye directive likho. Ise tree mein jitna neeche ho sake, utna neeche rakho."
+        ],
+        "code": "",
+        "tabId": "interview-next-js"
+      },
+      {
+        "id": "interview-native-view",
+        "title": "React Native: View and Text",
+        "english": [
+          "Question: Why is there no div in React Native?",
+          "React Native draws native views, not HTML. View is the box. Text is the only place for words. A string directly inside a View does not work the way text inside a div does on the web."
+        ],
+        "hindi": [
+          "Question: React Native mein div kyun nahi hota?",
+          "React Native HTML nahi, native views banata hai. View box hai. Words sirf Text ke andar likhte hain. View ke andar seedha string web ke div ki tarah kaam nahi karti."
+        ],
+        "code": "",
+        "tabId": "interview-react-native"
+      },
+      {
+        "id": "interview-mongo-document",
+        "title": "MongoDB: documents",
+        "english": [
+          "Question: How is a MongoDB document different from a table row?",
+          "A document is a set of fields, stored as JSON-like data. Documents in one collection can have different shapes. Every document has an _id. A collection is the group of related documents."
+        ],
+        "hindi": [
+          "Question: MongoDB document table ki row se kaise alag hai?",
+          "Document fields ka set hai, JSON jaisa. Ek collection ke documents ka shape alag ho sakta hai. Har document ka _id hota hai. Collection related documents ka group hai."
+        ],
+        "code": "",
+        "tabId": "interview-mongodb"
+      },
+      {
+        "id": "interview-mongoose-schema",
+        "title": "Mongoose: schema and populate",
+        "english": [
+          "Question: What do a schema and populate do?",
+          "A schema describes fields, types, and rules such as required. MongoDB itself will store almost any shape. The schema rejects bad data in your app. populate replaces a stored id with the related document when you query."
+        ],
+        "hindi": [
+          "Question: Schema aur populate kya karte hain?",
+          "Schema fields, types, aur rules batata hai, jaise required. MongoDB khud lagbhag koi bhi shape rakh leta hai. Schema galat data ko app mein reject karta hai. populate query ke time stored id ki jagah related document laga deta hai."
+        ],
+        "code": "",
+        "tabId": "interview-mongoose"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "interview-javascript",
+        "title": "JavaScript"
+      },
+      {
+        "id": "interview-react",
+        "title": "React"
+      },
+      {
+        "id": "interview-node-js",
+        "title": "Node.js"
+      },
+      {
+        "id": "interview-next-js",
+        "title": "Next.js"
+      },
+      {
+        "id": "interview-react-native",
+        "title": "React Native"
+      },
+      {
+        "id": "interview-mongodb",
+        "title": "MongoDB"
+      },
+      {
+        "id": "interview-mongoose",
+        "title": "Mongoose"
+      }
+    ]
+  },
+  {
+    "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803",
+    "slug": "node-js",
+    "title": "Node.js",
+    "summary": "A full Node.js path: runtime, modules, async, core APIs, HTTP, Express, APIs, and advanced process tools.",
+    "accent": "#3c873a",
+    "lessons": [
+      {
+        "id": "de16c93d-845d-4b83-8f2c-54483dde94ed",
+        "title": "What Node.js is",
+        "english": [
+          "Node.js runs JavaScript outside the browser. The same language you use on a page can read files, talk to a database, and serve an API.",
+          "It is built on Chrome's V8 engine and uses an event loop. Slow work, like a network call, does not freeze the rest of the program. Node continues with other tasks and comes back when the result is ready.",
+          "A typical start is a single file, started with node app.js. From there you add packages and split the app into modules."
+        ],
+        "hindi": [
+          "Node.js JavaScript ko browser ke bahar chalata hai. Wahi language jo page par chalti hai, files padh sakti hai, database se baat kar sakti hai, aur API serve kar sakti hai.",
+          "Ye Chrome ke V8 engine par bana hai aur event loop use karta hai. Network call jaisa slow kaam baaki program ko rokta nahi. Node dusre kaam karta rehta hai, aur result aane par wapas aata hai.",
+          "Shuruaat aksar ek file se hoti hai, node app.js se. Uske baad packages aur alag modules add hote hain."
+        ],
+        "code": "",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-basics"
+      },
+      {
+        "id": "node-vs-browser",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-basics",
+        "title": "Node.js and the browser",
+        "english": [
+          "Browser JavaScript can touch the page, DOM, and window. Node.js has no DOM. It can read files, open ports, and talk to the operating system.",
+          "Globals differ too. The browser has window and document. Node has global, process, and Buffer. A package written for one host often needs a check before it runs in the other."
+        ],
+        "hindi": [
+          "Browser JavaScript page, DOM, aur window ko chhu sakta hai. Node.js mein DOM nahi hota. Ye files padh sakta hai, ports khol sakta hai, aur operating system se baat kar sakta hai.",
+          "Globals bhi alag hain. Browser mein window aur document hain. Node mein global, process, aur Buffer hain. Jo package ek host ke liye likha hai, doosre par chalane se pehle check karo."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-v8-libuv",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-basics",
+        "title": "V8, libuv, and the thread pool",
+        "english": [
+          "V8 runs your JavaScript. libuv provides the event loop and async I/O. Together they let Node accept more work while a disk or network call is still waiting.",
+          "Some work, such as file system calls and DNS, uses a small libuv thread pool. The JavaScript you write still runs on one main thread. Heavy CPU loops block that thread, so they belong in worker threads."
+        ],
+        "hindi": [
+          "V8 aapka JavaScript chalata hai. libuv event loop aur async I/O deta hai. Dono milkar Node ko aur kaam lene dete hain jab disk ya network call abhi wait kar rahi ho.",
+          "Kuch kaam, jaise file system aur DNS, chhote libuv thread pool par jaate hain. Aapka JavaScript phir bhi ek main thread par chalta hai. Bhari CPU loop us thread ko rok deti hai, isliye wo worker threads mein honi chahiye."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-process",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-basics",
+        "title": "process, argv, and the environment",
+        "english": [
+          "process is the handle for the running program. process.argv is the command and its arguments. process.env holds environment variables such as PORT.",
+          "process.exit ends the program with a status code. 0 means success. Anything else means failure. process.cwd is the folder the command was started from."
+        ],
+        "hindi": [
+          "process chalte hue program ka handle hai. process.argv command aur uske arguments hain. process.env mein PORT jaise environment variables hote hain.",
+          "process.exit program ko status code ke saath band karta hai. 0 ka matlab success hai. Uske alawa failure. process.cwd woh folder hai jahan se command start hui."
+        ],
+        "code": "const port = process.env.PORT ?? \"3000\";\nconst name = process.argv[2] ?? \"world\";\nconsole.log(name, port);"
+      },
+      {
+        "id": "a3308beb-cd0d-47c8-ab62-eac714503cea",
+        "title": "Modules and npm",
+        "english": [
+          "Node treats each file as a module. In modern Node you export with export and import with import. Older code uses module.exports and require. Pick one style and stay with it.",
+          "npm is the package manager that ships with Node. npm init creates package.json, which lists your app name and dependencies. npm install express adds a library and records it.",
+          "Never commit node_modules. Share package.json and package-lock.json so someone else can install the same versions."
+        ],
+        "hindi": [
+          "Node har file ko ek module maanta hai. Naye Node mein export aur import use hote hain. Purana code module.exports aur require use karta hai. Ek style choose karke usi par raho.",
+          "npm Node ke saath aane wala package manager hai. npm init package.json banata hai, jisme app ka naam aur dependencies likhe hote hain. npm install express library add karta hai.",
+          "node_modules ko git mein mat daalo. package.json aur package-lock.json share karo, taaki doosra insaan wahi versions install kar sake."
+        ],
+        "code": "// math.js\nexport function add(a, b) {\n  return a + b;\n}\n\n// app.js\nimport { add } from \"./math.js\";\nconsole.log(add(2, 3));",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-modules"
+      },
+      {
+        "id": "node-commonjs",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-modules",
+        "title": "CommonJS require",
+        "english": [
+          "Older Node code uses CommonJS. module.exports sends a value out of the file. require loads it. require is synchronous and resolves from node_modules or a relative path.",
+          "Do not mix require and import in the same file unless you know the package type. New apps should prefer ES modules. You will still meet require in many tutorials and older packages."
+        ],
+        "hindi": [
+          "Purana Node code CommonJS use karta hai. module.exports file se value bahar bhejta hai. require use load karta hai. require synchronous hai aur node_modules ya relative path se file dhoondhta hai.",
+          "Jab tak package type clear na ho, ek hi file mein require aur import mat milao. Naye apps ES modules prefer karein. Purane packages aur tutorials mein require ab bhi milega."
+        ],
+        "code": "const { add } = require(\"./math\");\nmodule.exports = { add };"
+      },
+      {
+        "id": "node-esm",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-modules",
+        "title": "ES modules",
+        "english": [
+          "ES modules use import and export. Enable them with \"type\": \"module\" in package.json, or use the .mjs extension. Imports of your own files need the file extension, such as ./math.js.",
+          "import is static, so tools can see dependencies. Dynamic import() loads a module later and returns a promise. Node built-ins can be imported as node:fs or node:http."
+        ],
+        "hindi": [
+          "ES modules import aur export use karte hain. package.json mein \"type\": \"module\" likho, ya .mjs extension use karo. Apni files ke import mein extension chahiye, jaise ./math.js.",
+          "import static hota hai, isliye tools dependencies dekh sakte hain. Dynamic import() module baad mein load karta hai aur promise deta hai. Node built-ins node:fs ya node:http se import hote hain."
+        ],
+        "code": "import fs from \"node:fs/promises\";\n\nconst text = await fs.readFile(\"./note.txt\", \"utf8\");"
+      },
+      {
+        "id": "node-package-json",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-modules",
+        "title": "package.json and scripts",
+        "english": [
+          "package.json names the app, sets the module type, and lists dependencies. dependencies are needed to run. devDependencies are needed only while building or testing.",
+          "scripts are short commands. npm run dev can start the server. The lock file records exact versions so the next install matches. Semantic versions use major.minor.patch. A major bump can break callers."
+        ],
+        "hindi": [
+          "package.json app ka naam, module type, aur dependencies likhta hai. dependencies chalane ke liye chahiye. devDependencies sirf build ya test ke liye.",
+          "scripts chhote commands hain. npm run dev server start kar sakta hai. Lock file exact versions rakhta hai taaki agla install wahi ho. Semantic version major.minor.patch hota hai. Major bump callers ko tod sakta hai."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-callbacks",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-async",
+        "title": "Callbacks",
+        "english": [
+          "A callback is a function you pass so it can run later, when the work finishes. Node's older APIs use an error-first callback: the first argument is an error or null, then the result.",
+          "Nested callbacks become hard to read. That shape is called callback hell. Promises and async functions were added so the same flow can be written as steps."
+        ],
+        "hindi": [
+          "Callback woh function hai jo aap baad mein chalane ke liye dete ho, jab kaam khatam ho. Node ke purane APIs error-first callback use karte hain: pehla argument error ya null, phir result.",
+          "Andar-andar callbacks padhna mushkil ho jata hai. Ise callback hell kehte hain. Promises aur async functions isi flow ko steps ki tarah likhne ke liye aaye."
+        ],
+        "code": "import fs from \"node:fs\";\n\nfs.readFile(\"note.txt\", \"utf8\", (error, text) => {\n  if (error) throw error;\n  console.log(text);\n});"
+      },
+      {
+        "id": "node-promises",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-async",
+        "title": "Promises in Node",
+        "english": [
+          "A promise settles later with a value or an error. then handles success. catch handles failure. The fs/promises module is the promise form of the file APIs.",
+          "Promise.all runs several independent jobs and waits for all of them. If one rejects, the combined promise rejects. Use it when the jobs do not depend on each other."
+        ],
+        "hindi": [
+          "Promise baad mein value ya error ke saath settle hota hai. then success handle karta hai. catch failure handle karta hai. fs/promises file APIs ka promise form hai.",
+          "Promise.all kai independent kaam chalata hai aur sab ka intezar karta hai. Ek reject ho to poora promise reject hota hai. Jab kaam ek doosre par depend na karein, tab use karo."
+        ],
+        "code": "import fs from \"node:fs/promises\";\n\nconst [a, b] = await Promise.all([\n  fs.readFile(\"a.txt\", \"utf8\"),\n  fs.readFile(\"b.txt\", \"utf8\"),\n]);"
+      },
+      {
+        "id": "node-async-await",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-async",
+        "title": "async and await",
+        "english": [
+          "async marks a function that returns a promise. await pauses that function until the promise settles. The rest of the process keeps running.",
+          "Put awaited calls that can fail in try and catch. An unhandled rejection can crash the process, depending on the Node version and flags. Always handle the failure path of network and file calls."
+        ],
+        "hindi": [
+          "async function promise return karta hai. await us function ko rokta hai jab tak promise settle na ho. Baaki process chalta rehta hai.",
+          "Jo awaited call fail ho sakti hai, use try aur catch mein rakho. Unhandled rejection process ko crash kar sakti hai. Network aur file calls ka failure path hamesha handle karo."
+        ],
+        "code": "async function readNote() {\n  try {\n    return await fs.readFile(\"note.txt\", \"utf8\");\n  } catch (error) {\n    console.error(error);\n    return \"\";\n  }\n}"
+      },
+      {
+        "id": "node-event-loop",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-async",
+        "title": "Event loop phases",
+        "english": [
+          "The event loop is a cycle of phases. Timers run setTimeout and setInterval callbacks. The poll phase waits for I/O. The check phase runs setImmediate. Close callbacks run when a handle closes.",
+          "process.nextTick and resolved promises run between phases, before the loop continues. A tight nextTick loop can starve I/O. Do not use it to spin forever."
+        ],
+        "hindi": [
+          "Event loop phases ka cycle hai. Timers setTimeout aur setInterval callbacks chalate hain. Poll phase I/O ka intezar karti hai. Check phase setImmediate chalati hai. Close callbacks tab chalte hain jab handle band hota hai.",
+          "process.nextTick aur resolved promises phases ke beech chalte hain. Tight nextTick loop I/O ko bhookha rakh sakti hai. Use hamesha ke liye ghumao mat."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-timers",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-async",
+        "title": "Timers",
+        "english": [
+          "setTimeout runs once after a delay. setInterval repeats. clearTimeout and clearInterval cancel them. The delay is a minimum, not a promise of the exact millisecond, because other work may be on the loop.",
+          "setImmediate runs after the current poll phase. It is useful when you want to yield so I/O callbacks can run before more JavaScript."
+        ],
+        "hindi": [
+          "setTimeout ek baar delay ke baad chalta hai. setInterval dohrata hai. clearTimeout aur clearInterval unhe cancel karte hain. Delay minimum hai, exact millisecond ka promise nahi, kyunki loop par aur kaam ho sakta hai.",
+          "setImmediate current poll phase ke baad chalta hai. Jab aap JavaScript se pehle I/O callbacks ko mauka dena chahte ho, ye useful hai."
+        ],
+        "code": "const timer = setTimeout(() => {\n  console.log(\"later\");\n}, 500);\n\nclearTimeout(timer);"
+      },
+      {
+        "id": "node-fs",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
+        "title": "File system",
+        "english": [
+          "The fs module reads, writes, and deletes files. Prefer fs/promises in new code. Pass utf8 when you want a string. Without an encoding, you get a Buffer.",
+          "Sync methods such as readFileSync block the main thread. They are acceptable in a short script. In a server, use the async methods so one slow disk call does not freeze every request."
+        ],
+        "hindi": [
+          "fs module files padhta, likhta, aur delete karta hai. Naye code mein fs/promises prefer karo. String chahiye to utf8 do. Encoding na do to Buffer milta hai.",
+          "readFileSync jaise sync methods main thread ko rokte hain. Chhote script mein theek hain. Server mein async methods use karo, taaki ek slow disk call har request ko na rok de."
+        ],
+        "code": "import fs from \"node:fs/promises\";\n\nawait fs.writeFile(\"note.txt\", \"hello\\n\");\nconst text = await fs.readFile(\"note.txt\", \"utf8\");"
+      },
+      {
+        "id": "node-path",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
+        "title": "The path module",
+        "english": [
+          "path builds file paths without hard-coding slashes. path.join cleans segments. path.resolve turns a relative path into an absolute one from the current working directory.",
+          "Do not build paths with string addition. Windows uses backslashes. path hides that difference. path.basename and path.extname read the file name and extension."
+        ],
+        "hindi": [
+          "path file paths banata hai bina slashes hard-code kiye. path.join segments saaf karta hai. path.resolve relative path ko current working directory se absolute banata hai.",
+          "Paths string jodkar mat banao. Windows backslash use karta hai. path ye farq chhupa deta hai. path.basename aur path.extname file ka naam aur extension dete hain."
+        ],
+        "code": "import path from \"node:path\";\n\nconst file = path.join(process.cwd(), \"data\", \"note.txt\");"
+      },
+      {
+        "id": "node-events",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
+        "title": "EventEmitter",
+        "english": [
+          "Many Node objects are event emitters. You subscribe with on and publish with emit. once runs a listener a single time. removeListener drops it.",
+          "HTTP servers and streams are built on this idea. If you add listeners in a loop and never remove them, the process leaks memory. Node warns when one emitter has too many listeners."
+        ],
+        "hindi": [
+          "Kai Node objects event emitters hain. on se suno aur emit se bhejo. once listener ko ek baar chalata hai. removeListener use hata deta hai.",
+          "HTTP servers aur streams isi idea par bane hain. Agar loop mein listeners jodte raho aur kabhi na hatao, process memory leak karti hai. Ek emitter par bahut listeners hon to Node warn karta hai."
+        ],
+        "code": "import { EventEmitter } from \"node:events\";\n\nconst bus = new EventEmitter();\nbus.on(\"ping\", (name) => console.log(name));\nbus.emit(\"ping\", \"ok\");"
+      },
+      {
+        "id": "node-buffer",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
+        "title": "Buffers",
+        "english": [
+          "A Buffer is a fixed block of bytes. Files, network packets, and images are bytes, not JavaScript strings. Strings are text. Buffers are raw data.",
+          "Buffer.from creates one from a string or array. toString decodes it. Common encodings are utf8, hex, and base64. Do not assume every file is utf8 text."
+        ],
+        "hindi": [
+          "Buffer bytes ka fixed block hai. Files, network packets, aur images bytes hain, JavaScript strings nahi. String text hai. Buffer raw data hai.",
+          "Buffer.from string ya array se buffer banata hai. toString use decode karta hai. Common encodings utf8, hex, aur base64 hain. Har file ko utf8 text mat maano."
+        ],
+        "code": "const raw = Buffer.from(\"hello\", \"utf8\");\nconsole.log(raw.toString(\"hex\"));"
+      },
+      {
+        "id": "node-streams",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
+        "title": "Streams",
+        "english": [
+          "A stream moves data in chunks so you do not load a whole file into memory. Readable produces chunks. Writable accepts them. Transform changes them on the way. Duplex does both.",
+          "pipe connects a readable stream to a writable one. pipeline from node:stream/promises is safer because it forwards errors and destroys the streams. Backpressure means the writer is slower than the reader. Respect it or memory grows."
+        ],
+        "hindi": [
+          "Stream data ko chunks mein chalata hai taaki poori file memory mein na aaye. Readable chunks banata hai. Writable unhe leta hai. Transform beech mein badalta hai. Duplex dono karta hai.",
+          "pipe readable ko writable se jodta hai. node:stream/promises ka pipeline behtar hai kyunki errors aage bhejta hai aur streams destroy karta hai. Backpressure ka matlab writer reader se slow hai. Ise ignore karoge to memory badhegi."
+        ],
+        "code": "import fs from \"node:fs\";\nimport { pipeline } from \"node:stream/promises\";\n\nawait pipeline(\n  fs.createReadStream(\"in.txt\"),\n  fs.createWriteStream(\"out.txt\"),\n);"
+      },
+      {
+        "id": "7723c4fe-f7d6-4f0b-bfb6-0965bd544626",
+        "title": "A small HTTP server",
+        "english": [
+          "The built-in http module can listen on a port and send a response. You do not need a framework to understand the request and response cycle.",
+          "createServer receives a request and a response. You set a status, a content type, and the body, then end the response. listen starts the server.",
+          "Frameworks such as Express sit on top of this idea and add routing, JSON helpers, and middleware."
+        ],
+        "hindi": [
+          "Built-in http module ek port par sun sakta hai aur response bhej sakta hai. Request aur response cycle samajhne ke liye framework zaroori nahi.",
+          "createServer ko request aur response milte hain. Aap status, content type, aur body set karke response end karte ho. listen server start karta hai.",
+          "Express jaisa framework isi idea ke upar routing, JSON helpers, aur middleware jodta hai."
+        ],
+        "code": "import http from \"node:http\";\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { \"Content-Type\": \"text/plain\" });\n  res.end(\"Hello from Node\");\n});\n\nserver.listen(3000);",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-http"
+      },
+      {
+        "id": "node-request",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-http",
+        "title": "Request method and URL",
+        "english": [
+          "The request object tells you the HTTP method and the URL. req.method is GET or POST. req.url is the path plus the query string, not just a clean pathname.",
+          "Branch on the method and path before you write the response. Unknown paths should answer 404. Always end the response, or the browser waits forever."
+        ],
+        "hindi": [
+          "Request object HTTP method aur URL batata hai. req.method GET ya POST hota hai. req.url path aur query string hai, sirf saaf pathname nahi.",
+          "Response likhne se pehle method aur path par branch karo. Anjaan path par 404 bhejo. Response hamesha end karo, warna browser intezar karta rehta hai."
+        ],
+        "code": "const server = http.createServer((req, res) => {\n  if (req.method === \"GET\" && req.url === \"/health\") {\n    res.writeHead(200, { \"Content-Type\": \"application/json\" });\n    res.end(JSON.stringify({ ok: true }));\n    return;\n  }\n  res.writeHead(404);\n  res.end();\n});"
+      },
+      {
+        "id": "node-json-body",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-http",
+        "title": "Reading a JSON body",
+        "english": [
+          "The request body arrives as a stream of chunks. Collect the chunks, join them, and JSON.parse the string. A bad body should get status 400, not a crash.",
+          "Limit the size you accept. An unbounded body can exhaust memory. Frameworks do this for you. If you use the raw http module, you must do it yourself."
+        ],
+        "hindi": [
+          "Request body chunks ki stream mein aati hai. Chunks jodo, string banao, aur JSON.parse karo. Galat body par status 400 do, crash mat hone do.",
+          "Jo size accept karte ho, use limit karo. Bina limit ke body memory khatam kar sakti hai. Frameworks ye khud karte hain. Raw http module mein ye aapko karna padta hai."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-express-why",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-express",
+        "title": "Why Express exists",
+        "english": [
+          "Express is a small layer on Node's http server. It gives you routes, a request body parser, and a chain of functions called middleware. You install it with npm install express.",
+          "The same ideas exist in newer frameworks such as Fastify. Learn Express first if most tutorials around you use it. The mental model of request, middleware, and response stays useful either way."
+        ],
+        "hindi": [
+          "Express Node ke http server par ek chhoti layer hai. Ye routes, request body parser, aur middleware naam ki functions ki chain deta hai. npm install express se install hota hai.",
+          "Yahi ideas naye frameworks mein bhi hain, jaise Fastify. Agar aas-paas ke tutorials Express use karte hain to pehle Express seekho. Request, middleware, aur response ka model dono mein kaam aata hai."
+        ],
+        "code": "import express from \"express\";\n\nconst app = express();\napp.get(\"/\", (req, res) => {\n  res.json({ ok: true });\n});\napp.listen(3000);"
+      },
+      {
+        "id": "node-express-routes",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-express",
+        "title": "Routes and parameters",
+        "english": [
+          "A route matches a method and a path. app.get handles GET. app.post handles POST. A path segment that starts with a colon, such as /users/:id, is a parameter. Read it from req.params.id.",
+          "Query strings live on req.query. A request to /search?q=node sets req.query.q to node. Keep route handlers small and move shared checks into middleware."
+        ],
+        "hindi": [
+          "Route method aur path match karta hai. app.get GET handle karta hai. app.post POST handle karta hai. Colon se shuru segment, jaise /users/:id, parameter hai. Use req.params.id se padho.",
+          "Query strings req.query par hoti hain. /search?q=node par req.query.q node hota hai. Route handlers chhote rakho aur shared checks middleware mein rakho."
+        ],
+        "code": "app.get(\"/users/:id\", (req, res) => {\n  res.json({ id: req.params.id, q: req.query.q ?? \"\" });\n});"
+      },
+      {
+        "id": "node-middleware",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-express",
+        "title": "Middleware",
+        "english": [
+          "Middleware is a function that runs before the route handler. It receives req, res, and next. Call next to continue. If you do not call next or send a response, the request hangs.",
+          "express.json() is built-in middleware that parses a JSON body onto req.body. Your own middleware can check a header, log the path, or stop the request with a status code."
+        ],
+        "hindi": [
+          "Middleware woh function hai jo route handler se pehle chalta hai. Use req, res, aur next milte hain. Aage badhne ke liye next call karo. next na call karo aur response bhi na bhejo to request atki rehti hai.",
+          "express.json() built-in middleware hai jo JSON body ko req.body par rakhta hai. Apna middleware header check kar sakta hai, path log kar sakta hai, ya status code ke saath request rok sakta hai."
+        ],
+        "code": "app.use(express.json());\n\napp.use((req, res, next) => {\n  console.log(req.method, req.url);\n  next();\n});"
+      },
+      {
+        "id": "node-express-errors",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-express",
+        "title": "Error-handling middleware",
+        "english": [
+          "An error middleware has four arguments: error, req, res, and next. Express only treats it as an error handler because of that extra argument. Register it after your routes.",
+          "In async routes, a rejected promise is not caught unless you pass it to next or use a wrapper. Call next(error) so the error middleware can send one JSON error instead of crashing."
+        ],
+        "hindi": [
+          "Error middleware ke char arguments hote hain: error, req, res, aur next. Express use error handler isliye maanta hai kyunki ek extra argument hai. Ise routes ke baad register karo.",
+          "Async routes mein rejected promise tab tak nahi pakdi jati jab tak use next na do ya wrapper use na karo. next(error) call karo taaki error middleware ek JSON error bheje, crash na ho."
+        ],
+        "code": "app.use((error, req, res, next) => {\n  res.status(500).json({ message: \"Something went wrong\" });\n});"
+      },
+      {
+        "id": "node-rest",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-apis",
+        "title": "REST shape",
+        "english": [
+          "A REST API uses URLs for resources and HTTP methods for actions. GET reads. POST creates. PUT or PATCH updates. DELETE removes. The status code tells the client what happened.",
+          "201 means created. 400 means the client sent a bad body. 404 means the resource is missing. 500 means the server failed. Send JSON with a clear shape and do not leak stack traces to clients."
+        ],
+        "hindi": [
+          "REST API resources ke liye URLs aur actions ke liye HTTP methods use karti hai. GET padhta hai. POST banata hai. PUT ya PATCH update karta hai. DELETE hataata hai. Status code batata hai kya hua.",
+          "201 ka matlab created. 400 ka matlab client ne galat body bheji. 404 ka matlab resource nahi mila. 500 ka matlab server fail hua. Saaf JSON bhejo aur clients ko stack trace mat do."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-env",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-apis",
+        "title": "Environment variables",
+        "english": [
+          "Secrets and ports belong in the environment, not in source code. Read them from process.env. A missing required variable should stop startup with a clear message.",
+          "Locally, people often load a .env file with a package such as dotenv. Do not commit real secrets. Commit an example file that lists the names without the values."
+        ],
+        "hindi": [
+          "Secrets aur ports environment mein hone chahiye, source code mein nahi. Unhe process.env se padho. Zaroori variable missing ho to startup saaf message ke saath ruk jaye.",
+          "Local par log aksar dotenv jaise package se .env file load karte hain. Asli secrets commit mat karo. Example file commit karo jisme sirf naam hon, values na hon."
+        ],
+        "code": "const port = Number(process.env.PORT);\nif (!port) {\n  throw new Error(\"PORT is required\");\n}"
+      },
+      {
+        "id": "node-fetch",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-apis",
+        "title": "Calling another API",
+        "english": [
+          "Modern Node includes fetch. It returns a promise. Check response.ok before you parse JSON. A 404 still resolves the promise. ok is false when the status is not in the 200 range.",
+          "Set a timeout or abort the request if the other service is slow. Do not let one hung call hold a request handler open with no limit."
+        ],
+        "hindi": [
+          "Modern Node mein fetch shamil hai. Ye promise return karta hai. JSON parse karne se pehle response.ok check karo. 404 par bhi promise resolve hota hai. Status 200 range mein na ho to ok false hota hai.",
+          "Doosri service slow ho to timeout lagao ya request abort karo. Ek atki hui call ko bina limit ke request handler pakde mat rehne do."
+        ],
+        "code": "const response = await fetch(\"https://example.com/items\");\nif (!response.ok) {\n  throw new Error(\"Request failed\");\n}\nconst items = await response.json();"
+      },
+      {
+        "id": "node-child-process",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-advanced",
+        "title": "Child processes",
+        "english": [
+          "child_process starts another program. exec runs a shell command and buffers the output. spawn streams the output and does not invoke a shell unless you ask. Prefer spawn when you pass user input, so the shell cannot reinterpret it.",
+          "A child has its own memory. Use it for a tool such as a compiler. Do not start unlimited children. Wait for the close event and handle a non-zero exit code."
+        ],
+        "hindi": [
+          "child_process doosra program start karta hai. exec shell command chalata hai aur output buffer karta hai. spawn output stream karta hai aur shell tabhi chalata hai jab aap kahen. User input par spawn prefer karo, taaki shell use dobara na padhe.",
+          "Child ki apni memory hoti hai. Compiler jaise tool ke liye use karo. Unlimited children mat kholo. close event ka intezar karo aur non-zero exit code handle karo."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-cluster",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-advanced",
+        "title": "Cluster",
+        "english": [
+          "Node's JavaScript runs on one thread per process. The cluster module forks several processes that share the same server port. The operating system spreads connections across them.",
+          "Workers do not share memory. A value set in one worker is invisible to the others. For shared state, use a database or a store such as Redis. If a worker dies, the primary can fork a replacement."
+        ],
+        "hindi": [
+          "Node ka JavaScript har process mein ek thread par chalta hai. cluster module kai processes fork karta hai jo ek hi server port share karte hain. Operating system connections un par baantta hai.",
+          "Workers memory share nahi karte. Ek worker ki value doosre ko nahi dikhti. Shared state ke liye database ya Redis jaisa store use karo. Worker mar jaye to primary naya fork kar sakta hai."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-workers",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-advanced",
+        "title": "Worker threads",
+        "english": [
+          "worker_threads run JavaScript on another thread inside the same process. Use them for CPU work such as image processing or heavy parsing. They are not required for normal database or HTTP waiting. The event loop already handles that.",
+          "Threads talk by posting messages. They do not share your objects unless you use shared memory on purpose. Keep the worker's job small and well defined."
+        ],
+        "hindi": [
+          "worker_threads ek hi process ke andar doosre thread par JavaScript chalate hain. Inhe CPU kaam ke liye use karo, jaise image processing ya bhari parsing. Normal database ya HTTP wait ke liye ye zaroori nahi. Event loop woh pehle se karta hai.",
+          "Threads messages bhejkar baat karte hain. Jab tak aap jaan kar shared memory na use karo, objects share nahi hote. Worker ka kaam chhota aur clear rakho."
+        ],
+        "code": ""
+      },
+      {
+        "id": "node-websockets",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-advanced",
+        "title": "WebSockets",
+        "english": [
+          "HTTP is a request and a response. A WebSocket stays open so the server can push messages. Chat, live scores, and dashboards use it. Socket.IO is a popular library that adds rooms and a fallback when WebSocket is blocked.",
+          "One Node process holds those connections in memory. Several processes need a shared adapter, often Redis, so a message published on one process reaches sockets on the others."
+        ],
+        "hindi": [
+          "HTTP ek request aur ek response hai. WebSocket khula rehta hai taaki server messages push kar sake. Chat, live scores, aur dashboards ise use karte hain. Socket.IO popular library hai jo rooms aur fallback jodti hai jab WebSocket block ho.",
+          "Ek Node process un connections ko memory mein rakhta hai. Kai processes ko shared adapter chahiye, aksar Redis, taaki ek process ka message doosri process ke sockets tak pahunche."
+        ],
+        "code": ""
+      }
+    ],
+    "tabs": [
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-basics",
+        "title": "Basics"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-modules",
+        "title": "Modules"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-async",
+        "title": "Async"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
+        "title": "Core modules"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-http",
+        "title": "HTTP"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-express",
+        "title": "Express"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-apis",
+        "title": "APIs"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-advanced",
+        "title": "Advanced"
+      }
+    ]
+  },
+  {
+    "id": "150fc6a7-f491-4cd0-a3f5-42d7b7bc06ae",
+    "slug": "javascript",
+    "title": "JavaScript",
+    "summary": "Values, functions, arrays, and asynchronous code.",
+    "accent": "#f7df1e",
+    "lessons": [
+      {
+        "id": "b5860211-5133-464b-8ee7-49674c04c8b2",
+        "title": "Values and variables",
+        "english": [
+          "A variable is a name for a value. Use const when the binding will not be reassigned, and let when it will. Avoid var in new code.",
+          "JavaScript types include string, number, boolean, null, undefined, object, and symbol. Arrays and functions are objects with special behavior.",
+          "=== compares value and type. == converts types first, which hides bugs. Prefer ===."
+        ],
+        "hindi": [
+          "Variable ek value ka naam hai. const tab use karo jab binding badlegi nahi, aur let tab jab badlegi. Naye code mein var avoid karo.",
+          "JavaScript types mein string, number, boolean, null, undefined, object, aur symbol aate hain. Array aur function bhi object hain, lekin unka behavior khaas hota hai.",
+          "=== value aur type dono compare karta hai. == pehle type convert karta hai, isliye bugs chhup sakte hain. === behtar hai."
+        ],
+        "code": "const name = \"Subham\";\nlet score = 10;\nscore = score + 5;\n\nconsole.log(name, score);",
+        "tabId": "150fc6a7-f491-4cd0-a3f5-42d7b7bc06ae-values"
+      },
+      {
+        "id": "d62a863c-eda7-463e-a518-ba3971fb5f88",
+        "title": "Functions and arrays",
+        "english": [
+          "A function is a reusable block. Parameters are the inputs. The return value is what the caller receives. If you forget return, the result is undefined.",
+          "Arrow functions are a short form. They are handy for callbacks. A method that uses this should usually stay a regular function.",
+          "Arrays hold ordered values. map builds a new array, filter keeps matching items, and find returns the first match."
+        ],
+        "hindi": [
+          "Function ek dobara use hone wala block hai. Parameters input hain. return wahi value hai jo caller ko milti hai. return bhool gaye to result undefined hota hai.",
+          "Arrow function chhota form hai. Callbacks ke liye ye aasaan hai. Jo method this use karta hai, use aksar normal function hi rehna chahiye.",
+          "Array ordered values rakhta hai. map naya array banata hai, filter matching items rakhta hai, aur find pehla match deta hai."
+        ],
+        "code": "const prices = [10, 25, 8];\nconst withTax = prices.map((price) => price * 1.18);\nconst costly = prices.filter((price) => price > 15);",
+        "tabId": "150fc6a7-f491-4cd0-a3f5-42d7b7bc06ae-functions"
+      },
+      {
+        "id": "5120aba2-9110-4347-882d-fc2bedc652ce",
+        "title": "Promises and async",
+        "english": [
+          "A promise represents work that finishes later. It can succeed with a value or fail with an error. then handles success. catch handles failure.",
+          "async and await let you write that flow like normal steps. await pauses that function until the promise settles. The rest of the program keeps running.",
+          "Wrap awaited calls in try and catch when failure is possible, such as a network request."
+        ],
+        "hindi": [
+          "Promise aisa kaam dikhata hai jo baad mein khatam hota hai. Ye value ke saath succeed ho sakta hai ya error ke saath fail. then success handle karta hai. catch failure handle karta hai.",
+          "async aur await se ye flow normal steps jaisa likha jata hai. await us function ko rokta hai jab tak promise settle na ho. Baaki program chalta rehta hai.",
+          "Jahan failure ho sakti hai, jaise network request, wahan awaited call ko try aur catch mein rakho."
+        ],
+        "code": "async function loadUser(id) {\n  try {\n    const response = await fetch(\"/api/users/\" + id);\n    return await response.json();\n  } catch (error) {\n    console.error(error);\n    return null;\n  }\n}",
+        "tabId": "150fc6a7-f491-4cd0-a3f5-42d7b7bc06ae-async"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "150fc6a7-f491-4cd0-a3f5-42d7b7bc06ae-values",
+        "title": "Values"
+      },
+      {
+        "id": "150fc6a7-f491-4cd0-a3f5-42d7b7bc06ae-functions",
+        "title": "Functions"
+      },
+      {
+        "id": "150fc6a7-f491-4cd0-a3f5-42d7b7bc06ae-async",
+        "title": "Async"
+      }
+    ]
+  },
+  {
+    "id": "4f5062a0-adbd-449e-956f-e20950dcf403",
+    "slug": "react",
+    "title": "React",
+    "summary": "Build screens from components, props, and state.",
+    "accent": "#61dafb",
+    "lessons": [
+      {
+        "id": "32097ae1-890e-4fae-b9b0-84f7111ea8b9",
+        "title": "Components and JSX",
+        "english": [
+          "A React component is a function that returns UI. The name starts with a capital letter. You use it like an HTML tag.",
+          "JSX looks like HTML inside JavaScript. Curly braces insert a value. A component returns one parent, or a fragment if you do not want an extra element.",
+          "Keep components small. A page is a tree of components, each responsible for one piece of the screen."
+        ],
+        "hindi": [
+          "React component ek function hai jo UI return karta hai. Naam capital letter se shuru hota hai. Use HTML tag ki tarah likhte hain.",
+          "JSX JavaScript ke andar HTML jaisa dikhta hai. Curly braces mein value daalte hain. Component ek parent return karta hai, ya fragment jab extra element nahi chahiye.",
+          "Components chhote rakho. Page components ka tree hota hai, aur har component screen ka ek hissa sambhalta hai."
+        ],
+        "code": "function Greeting({ name }) {\n  return <h1>Hello, {name}</h1>;\n}\n\nexport default function Page() {\n  return <Greeting name=\"Subham\" />;\n}",
+        "tabId": "4f5062a0-adbd-449e-956f-e20950dcf403-components"
+      },
+      {
+        "id": "fc8850e6-218f-4ebd-b51e-9e8a12655c61",
+        "title": "Props and state",
+        "english": [
+          "Props are inputs passed from a parent. The child should treat them as read-only. If the parent passes a new name, React renders the child again.",
+          "State is data the component owns and can change. useState returns the current value and a setter. Call the setter to update. Do not change the state object in place.",
+          "When state changes, React calculates the new UI and updates the DOM for you."
+        ],
+        "hindi": [
+          "Props parent se aane wale inputs hain. Child unhe read-only maane. Parent naya name de to React child ko dubara render karta hai.",
+          "State woh data hai jo component ke paas hai aur badal sakta hai. useState current value aur setter deta hai. Update ke liye setter call karo. State object ko seedha mat badlo.",
+          "State badalte hi React naya UI nikalta hai aur DOM khud update karta hai."
+        ],
+        "code": "import { useState } from \"react\";\n\nexport function Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <button onClick={() => setCount(count + 1)}>\n      Count {count}\n    </button>\n  );\n}",
+        "tabId": "4f5062a0-adbd-449e-956f-e20950dcf403-state"
+      },
+      {
+        "id": "64df1ce5-1069-4a38-b315-e5f7bdd3ed35",
+        "title": "Lists and events",
+        "english": [
+          "Render a list with map. Each item needs a stable key so React can match items when the list changes. The key should come from the data, not from the array index, when items can move or be deleted.",
+          "Events use camelCase names such as onClick and onChange. The handler receives a synthetic event. Call preventDefault on a form submit if you handle it in JavaScript.",
+          "Lift shared state to the closest parent that needs it, then pass values and setters down as props."
+        ],
+        "hindi": [
+          "List map se render hoti hai. Har item ko stable key chahiye, taaki list badle to React items ko pehchan sake. Jab items move ya delete ho sakte hain, key data se aani chahiye, index se nahi.",
+          "Events ke naam camelCase hote hain, jaise onClick aur onChange. Handler ko event milta hai. Form submit JavaScript se handle karo to preventDefault call karo.",
+          "Shared state us sabse nazdeek parent par rakho jise uski zaroorat hai, phir values aur setters props se neeche bhejo."
+        ],
+        "code": "const topics = [\"React\", \"Next.js\"];\n\nexport function TopicList() {\n  return (\n    <ul>\n      {topics.map((topic) => (\n        <li key={topic}>{topic}</li>\n      ))}\n    </ul>\n  );\n}",
+        "tabId": "4f5062a0-adbd-449e-956f-e20950dcf403-lists"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "4f5062a0-adbd-449e-956f-e20950dcf403-components",
+        "title": "Components"
+      },
+      {
+        "id": "4f5062a0-adbd-449e-956f-e20950dcf403-state",
+        "title": "State"
+      },
+      {
+        "id": "4f5062a0-adbd-449e-956f-e20950dcf403-lists",
+        "title": "Lists"
+      }
+    ]
+  },
+  {
+    "id": "24561c4e-914f-4956-8961-629e40851473",
+    "slug": "next-js",
+    "title": "Next.js",
+    "summary": "Pages, layouts, and the split between server and client.",
+    "accent": "#111111",
+    "lessons": [
+      {
+        "id": "cb61d3ba-d700-41ff-b698-adf87850230e",
+        "title": "The app router",
+        "english": [
+          "In the app directory, a folder is a route and page.tsx is the screen. app/dashboard/page.tsx becomes /dashboard.",
+          "A folder in parentheses, such as (public), groups routes without changing the URL. A folder in square brackets, such as [slug], is a dynamic segment.",
+          "You can export metadata from a page so the title and description stay with that route."
+        ],
+        "hindi": [
+          "app directory mein folder route hai aur page.tsx screen hai. app/dashboard/page.tsx ka URL /dashboard hota hai.",
+          "Parentheses wala folder, jaise (public), routes ko group karta hai bina URL badle. Square brackets wala folder, jaise [slug], dynamic segment hai.",
+          "Page se metadata export kar sakte ho, taaki title aur description usi route ke saath rahein."
+        ],
+        "code": "// app/dashboard/page.tsx\nexport default function DashboardPage() {\n  return <h1>Dashboard</h1>;\n}",
+        "tabId": "24561c4e-914f-4956-8961-629e40851473-routing"
+      },
+      {
+        "id": "828adb78-b699-4236-a611-07ac8f3c4e27",
+        "title": "Layouts and links",
+        "english": [
+          "layout.tsx wraps the pages in that segment. It stays mounted when you move between child routes, so shared chrome like a sidebar does not remount every time.",
+          "Use the Link component for in-app navigation. It prefetches the next page and avoids a full browser reload.",
+          "usePathname tells a client component which URL is active, which is how a nav item shows the current page."
+        ],
+        "hindi": [
+          "layout.tsx us segment ke pages ko wrap karta hai. Child routes ke beech jaane par ye mounted rehta hai, isliye sidebar har baar dubara mount nahi hota.",
+          "App ke andar navigation ke liye Link use karo. Ye agla page prefetch karta hai aur poora browser reload nahi karta.",
+          "usePathname client component ko batata hai kaunsa URL active hai. Isi se nav item current page dikhata hai."
+        ],
+        "code": "import Link from \"next/link\";\n\nexport function TopicLink() {\n  return <Link href=\"/dashboard/react\">React</Link>;\n}",
+        "tabId": "24561c4e-914f-4956-8961-629e40851473-layouts"
+      },
+      {
+        "id": "e7d88848-3790-4fb0-b552-837f56991108",
+        "title": "Server and client components",
+        "english": [
+          "Components in the app router are server components by default. They can read files and secrets and they do not ship their logic to the browser.",
+          "Add use client at the top when you need state, effects, or browser events. Keep that boundary as low in the tree as you can.",
+          "A server layout can pass a server page as children into a client shell. That is how this dashboard protects pages and still renders lesson content on the server."
+        ],
+        "hindi": [
+          "App router mein components by default server components hote hain. Ye files aur secrets padh sakte hain, aur unka logic browser ko nahi jaata.",
+          "State, effects, ya browser events chahiye hon to file ke top par use client likho. Ye boundary tree mein jitni neeche ho sake, utni neeche rakho.",
+          "Server layout ek server page ko children ki tarah client shell mein bhej sakta hai. Isi tarah ye dashboard pages ko protect karta hai aur lessons server par render karta hai."
+        ],
+        "code": "",
+        "tabId": "24561c4e-914f-4956-8961-629e40851473-components"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "24561c4e-914f-4956-8961-629e40851473-routing",
+        "title": "Routing"
+      },
+      {
+        "id": "24561c4e-914f-4956-8961-629e40851473-layouts",
+        "title": "Layouts"
+      },
+      {
+        "id": "24561c4e-914f-4956-8961-629e40851473-components",
+        "title": "Components"
+      }
+    ]
+  },
+  {
+    "id": "0e91a685-7f98-4b00-97a6-ce3ab905d784",
+    "slug": "react-native",
+    "title": "React Native",
+    "summary": "React for iOS and Android, with native views instead of HTML.",
+    "accent": "#0ea5e9",
+    "lessons": [
+      {
+        "id": "821b6ce9-a23a-41f2-befa-592e010a58cb",
+        "title": "Native views, not HTML",
+        "english": [
+          "React Native uses React, but the host is a phone, not a browser. There is no div or span. View is a box, Text shows words, and Pressable handles taps.",
+          "Text must live inside a Text component. Putting a string directly in a View does not work the way a div does on the web.",
+          "The component model is the same idea as React: small functions, props in, UI out."
+        ],
+        "hindi": [
+          "React Native React use karta hai, lekin host browser nahi, phone hai. Yahan div ya span nahi hota. View ek box hai, Text words dikhata hai, aur Pressable tap handle karta hai.",
+          "Text ko Text component ke andar hona chahiye. View ke andar seedha string web ke div ki tarah kaam nahi karta.",
+          "Component model React jaisa hi hai: chhote functions, props andar, UI bahar."
+        ],
+        "code": "import { Text, View } from \"react-native\";\n\nexport function Hello() {\n  return (\n    <View>\n      <Text>Hello from React Native</Text>\n    </View>\n  );\n}",
+        "tabId": "0e91a685-7f98-4b00-97a6-ce3ab905d784-views"
+      },
+      {
+        "id": "2f8f2411-d116-4ebf-a119-6eeb441819ee",
+        "title": "StyleSheet and flex",
+        "english": [
+          "Styles are JavaScript objects, usually created with StyleSheet.create. Names are camelCase, so backgroundColor instead of background-color.",
+          "Layout uses flexbox, and the default direction is column. flex: 1 makes a view fill the space its parent offers.",
+          "There is no CSS cascade. Each component gets the styles you pass. Share tokens, such as colors, from one file."
+        ],
+        "hindi": [
+          "Styles JavaScript objects hain, aksar StyleSheet.create se. Naam camelCase hote hain, isliye background-color ki jagah backgroundColor.",
+          "Layout flexbox use karta hai, aur default direction column hai. flex: 1 view ko parent ki khali jagah bharne deta hai.",
+          "Yahan CSS cascade nahi hai. Har component ko wahi styles milte hain jo aap dete ho. Colors jaise tokens ek file se share karo."
+        ],
+        "code": "import { StyleSheet, View } from \"react-native\";\n\nconst styles = StyleSheet.create({\n  screen: { flex: 1, padding: 16, backgroundColor: \"#fffdf8\" },\n});\n\nexport function Screen() {\n  return <View style={styles.screen} />;\n}",
+        "tabId": "0e91a685-7f98-4b00-97a6-ce3ab905d784-layout"
+      },
+      {
+        "id": "df9d7420-f446-4b9a-bf46-3b93c39c47f1",
+        "title": "Screens and navigation",
+        "english": [
+          "A mobile app is a stack of screens. React Navigation is the common library. A stack navigator pushes a screen and pops it when the user goes back.",
+          "Each screen is still a React component. Route params carry an id, the same job a URL segment does on the web.",
+          "Platform differences belong in a small place. Most UI can stay shared if you stick to View, Text, and Pressable."
+        ],
+        "hindi": [
+          "Mobile app screens ka stack hota hai. React Navigation common library hai. Stack navigator screen push karta hai aur back par pop karta hai.",
+          "Har screen phir bhi ek React component hai. Route params id le jaate hain, jaise web par URL segment karta hai.",
+          "Platform differences chhoti jagah par rakho. Zyadatar UI View, Text, aur Pressable se shared reh sakta hai."
+        ],
+        "code": "",
+        "tabId": "0e91a685-7f98-4b00-97a6-ce3ab905d784-navigation"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "0e91a685-7f98-4b00-97a6-ce3ab905d784-views",
+        "title": "Views"
+      },
+      {
+        "id": "0e91a685-7f98-4b00-97a6-ce3ab905d784-layout",
+        "title": "Layout"
+      },
+      {
+        "id": "0e91a685-7f98-4b00-97a6-ce3ab905d784-navigation",
+        "title": "Navigation"
+      }
+    ]
+  },
+  {
+    "id": "44ed1072-1a44-4278-93e3-c198a3fcdf0a",
+    "slug": "mongodb",
+    "title": "MongoDB",
+    "summary": "Store documents in collections and query them.",
+    "accent": "#00684a",
+    "lessons": [
+      {
+        "id": "328083e4-b0fe-47b9-9db7-9f7a15cb836c",
+        "title": "Documents and collections",
+        "english": [
+          "MongoDB stores JSON-like documents. A document is a set of fields. Related documents live in a collection, similar to rows in a table, but each document can have a different shape.",
+          "Every document has an _id. If you do not set one, MongoDB creates an ObjectId.",
+          "A database holds many collections. One app often uses one database and a collection per kind of thing, such as users or lessons."
+        ],
+        "hindi": [
+          "MongoDB JSON jaise documents store karta hai. Document fields ka set hai. Related documents ek collection mein rehte hain. Ye table ki rows jaisa hai, lekin har document ka shape alag ho sakta hai.",
+          "Har document ka _id hota hai. Aap na do to MongoDB ObjectId bana deta hai.",
+          "Ek database mein kai collections hoti hain. Aksar ek app ek database use karti hai, aur har cheez ki alag collection, jaise users ya lessons."
+        ],
+        "code": "{\n  \"_id\": \"lesson-1\",\n  \"title\": \"Documents and collections\",\n  \"topic\": \"MongoDB\"\n}",
+        "tabId": "44ed1072-1a44-4278-93e3-c198a3fcdf0a-documents"
+      },
+      {
+        "id": "837d9e9b-12c0-4f3c-b88d-db4f9ae7d990",
+        "title": "Create, read, update, delete",
+        "english": [
+          "insertOne adds a document. find looks up documents. findOne returns the first match. updateOne changes fields. deleteOne removes a document.",
+          "A filter is a query object. { topic: \"MongoDB\" } matches documents whose topic field equals that string.",
+          "$set changes only the fields you name. Without it, a naive replace can wipe the rest of the document."
+        ],
+        "hindi": [
+          "insertOne document add karta hai. find documents dhoondhta hai. findOne pehla match deta hai. updateOne fields badalta hai. deleteOne document hata deta hai.",
+          "Filter ek query object hai. { topic: \"MongoDB\" } un documents ko match karta hai jinka topic field wahi string hai.",
+          "$set sirf un fields ko badalta hai jinhe aap naam dete ho. Bina iske poora document replace ho sakta hai aur baaki fields mit sakti hain."
+        ],
+        "code": "await lessons.insertOne({ title: \"CRUD\", topic: \"MongoDB\" });\n\nawait lessons.updateOne(\n  { title: \"CRUD\" },\n  { $set: { published: true } },\n);",
+        "tabId": "44ed1072-1a44-4278-93e3-c198a3fcdf0a-crud"
+      },
+      {
+        "id": "ba515b53-f5b5-4a2e-87cc-324663198d9b",
+        "title": "Useful queries",
+        "english": [
+          "Comparison operators live under a field. $gt means greater than, $in means one of these values, and $ne means not equal.",
+          "sort, skip, and limit shape the result. Sort by a field, skip earlier pages, and limit the page size.",
+          "An index on a field you filter or sort by keeps the query fast as the collection grows. The _id field is indexed already."
+        ],
+        "hindi": [
+          "Comparison operators field ke andar likhe jaate hain. $gt ka matlab greater than, $in ka matlab in values mein se ek, aur $ne ka matlab not equal.",
+          "sort, skip, aur limit result ko shape karte hain. Field se sort karo, pichhle pages skip karo, aur page size limit karo.",
+          "Jis field par filter ya sort karte ho, us par index query ko tez rakhta hai jab collection badi ho. _id pehle se indexed hai."
+        ],
+        "code": "await lessons\n  .find({ topic: \"MongoDB\" })\n  .sort({ title: 1 })\n  .limit(10)\n  .toArray();",
+        "tabId": "44ed1072-1a44-4278-93e3-c198a3fcdf0a-queries"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "44ed1072-1a44-4278-93e3-c198a3fcdf0a-documents",
+        "title": "Documents"
+      },
+      {
+        "id": "44ed1072-1a44-4278-93e3-c198a3fcdf0a-crud",
+        "title": "CRUD"
+      },
+      {
+        "id": "44ed1072-1a44-4278-93e3-c198a3fcdf0a-queries",
+        "title": "Queries"
+      }
+    ]
+  },
+  {
+    "id": "1a2d40e5-af83-4b2c-808d-a4e01f40c785",
+    "slug": "mongoose",
+    "title": "Mongoose",
+    "summary": "Schemas, models, and validation on top of MongoDB.",
+    "accent": "#880000",
+    "lessons": [
+      {
+        "id": "117844bd-28b1-44df-8150-ee0a4a31615b",
+        "title": "Schemas",
+        "english": [
+          "Mongoose is a library for Node that describes the shape of a MongoDB document. A schema lists fields, their types, and rules such as required or unique.",
+          "MongoDB itself will store almost any shape. The schema is your app's contract, so bad data is rejected before it is saved.",
+          "Default values and timestamps can be declared once on the schema instead of repeated in every insert."
+        ],
+        "hindi": [
+          "Mongoose Node ki library hai jo MongoDB document ka shape batati hai. Schema fields, unke types, aur rules likhta hai, jaise required ya unique.",
+          "MongoDB khud lagbhag koi bhi shape rakh leta hai. Schema aapki app ka contract hai, isliye galat data save hone se pehle reject ho jata hai.",
+          "Default values aur timestamps schema par ek baar likh sakte ho, har insert mein dohrane ki zaroorat nahi."
+        ],
+        "code": "import mongoose from \"mongoose\";\n\nconst lessonSchema = new mongoose.Schema(\n  {\n    title: { type: String, required: true },\n    topic: { type: String, required: true },\n  },\n  { timestamps: true },\n);",
+        "tabId": "1a2d40e5-af83-4b2c-808d-a4e01f40c785-schemas"
+      },
+      {
+        "id": "e6a50d90-22df-453a-9db5-af9b81c2ce5c",
+        "title": "Models and validation",
+        "english": [
+          "A model is a constructor compiled from a schema. It is tied to a collection. Lesson.create inserts a document and runs validators first.",
+          "If a required field is missing, save fails with a validation error. Read error.errors to see which fields failed.",
+          "Connect once when the app starts, with mongoose.connect and your database URL. Do not open a new connection on every request."
+        ],
+        "hindi": [
+          "Model schema se bana constructor hai. Ye ek collection se juda hota hai. Lesson.create document insert karta hai aur pehle validators chalata hai.",
+          "Required field missing ho to save validation error ke saath fail hota hai. error.errors se pata chalta hai kaunse fields fail hue.",
+          "App start par mongoose.connect se ek baar connect karo, apne database URL ke saath. Har request par naya connection mat kholo."
+        ],
+        "code": "const Lesson = mongoose.model(\"Lesson\", lessonSchema);\n\nawait Lesson.create({\n  title: \"Schemas\",\n  topic: \"Mongoose\",\n});",
+        "tabId": "1a2d40e5-af83-4b2c-808d-a4e01f40c785-models"
+      },
+      {
+        "id": "982814ce-88a6-42fc-92f2-6e0c1c62d8f9",
+        "title": "References between documents",
+        "english": [
+          "A field can store another document's id. In the schema, set the type to ObjectId and ref to the other model name.",
+          "populate replaces that id with the related document when you query. Use it when the screen needs both records.",
+          "Do not populate everything by default. Extra joins cost time. Load the related document only on the route that needs it."
+        ],
+        "hindi": [
+          "Ek field doosre document ki id rakh sakti hai. Schema mein type ObjectId rakho aur ref mein doosre model ka naam.",
+          "populate query ke time us id ki jagah related document laga deta hai. Jab screen ko dono records chahiye, tab use karo.",
+          "Sab kuch by default populate mat karo. Extra joins time lete hain. Related document sirf us route par load karo jise uski zaroorat hai."
+        ],
+        "code": "const noteSchema = new mongoose.Schema({\n  body: String,\n  lesson: { type: mongoose.Schema.Types.ObjectId, ref: \"Lesson\" },\n});\n\nconst notes = await Note.find().populate(\"lesson\");",
+        "tabId": "1a2d40e5-af83-4b2c-808d-a4e01f40c785-relations"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "1a2d40e5-af83-4b2c-808d-a4e01f40c785-schemas",
+        "title": "Schemas"
+      },
+      {
+        "id": "1a2d40e5-af83-4b2c-808d-a4e01f40c785-models",
+        "title": "Models"
+      },
+      {
+        "id": "1a2d40e5-af83-4b2c-808d-a4e01f40c785-relations",
+        "title": "Relations"
+      }
+    ]
+  }
+]
