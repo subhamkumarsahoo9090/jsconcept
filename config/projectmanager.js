@@ -106,6 +106,17 @@ export const projectManager = {
         noIndex: true,
       },
     },
+    "/dashboard/settings": {
+      showTopNav: false,
+      showSidebar: true,
+      showFooter: false,
+      seo: {
+        title: "Settings",
+        description: "Study agent and browser settings.",
+        keywords: ["settings"],
+        noIndex: true,
+      },
+    },
   },
   // Values come from .env.local. Do not paste live secrets into this file.
   secrets: {

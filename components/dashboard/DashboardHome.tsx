@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import DeleteLibraryButton from "@/components/dashboard/DeleteLibraryButton";
 import LibraryForm from "@/components/dashboard/LibraryForm";
+import { primaryButtonClass } from "@/components/ui/classes";
 import { useApp } from "@/context/AppProvider";
 import type { Library } from "@/lib/libraryTypes";
 
@@ -54,6 +55,49 @@ function LibraryCard({ library }: { library: Library }) {
   );
 }
 
+function AddLibraryDialog() {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  function closeDialog() {
+    dialogRef.current?.close();
+  }
+
+  return (
+    <div className="mt-6">
+      <button
+        type="button"
+        className={primaryButtonClass}
+        onClick={() => dialogRef.current?.showModal()}
+      >
+        Add library
+      </button>
+      <dialog
+        ref={dialogRef}
+        className="fixed top-1/2 left-1/2 z-50 m-0 w-[min(32rem,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border border-border bg-background p-0 text-foreground shadow-xl backdrop:bg-black/40"
+        onClick={(event) => {
+          if (event.target === dialogRef.current) closeDialog();
+        }}
+      >
+        <div className="p-5 sm:p-6">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold">Add library</h2>
+            <button
+              type="button"
+              className="rounded-full px-3 py-1.5 text-sm text-muted hover:bg-surface"
+              onClick={closeDialog}
+            >
+              Close
+            </button>
+          </div>
+          <div className="mt-4">
+            <LibraryForm submitLabel="Save library" onDone={closeDialog} />
+          </div>
+        </div>
+      </dialog>
+    </div>
+  );
+}
+
 export default function DashboardHome({ libraries }: { libraries: Library[] }) {
   const { user } = useApp();
 
@@ -69,12 +113,7 @@ export default function DashboardHome({ libraries }: { libraries: Library[] }) {
         Add a library, then open it to create, edit, or delete lessons. Every
         change is saved in data/library.json.
       </p>
-      <section className="mt-8 rounded-3xl border border-border bg-background p-5 shadow-sm">
-        <h2 className="text-lg font-semibold">Add library</h2>
-        <div className="mt-4">
-          <LibraryForm submitLabel="Add library" />
-        </div>
-      </section>
+      <AddLibraryDialog />
       <ul className="mt-6 grid gap-4 sm:grid-cols-2">
         {libraries
           .filter((library) => library.slug !== "interview")

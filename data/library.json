@@ -359,73 +359,306 @@
       },
       {
         "id": "node-fs",
-        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
-        "title": "File system",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-fs",
+        "title": "fs: files and folders",
         "english": [
-          "The fs module reads, writes, and deletes files. Prefer fs/promises in new code. Pass utf8 when you want a string. Without an encoding, you get a Buffer.",
-          "Sync methods such as readFileSync block the main thread. They are acceptable in a short script. In a server, use the async methods so one slow disk call does not freeze every request."
+          "Import the promise API with import fs from \"node:fs/promises\". Import the callback and sync API with import fs from \"node:fs\". A promise method returns a promise. A Sync method blocks the main thread until the disk answers. In a server, use the promise or callback form.",
+          "File methods: readFile(path, encoding) reads a file. writeFile replaces the file. appendFile adds to the end. copyFile copies. cp copies a file or a folder. rename moves or renames. unlink deletes a file. rm deletes a file or folder, and { recursive: true } deletes a folder tree. truncate shrinks a file. open returns a handle. close closes it. read and write work on that handle.",
+          "Folder and info methods: mkdir creates a folder. Use { recursive: true } for nested folders. mkdtemp makes a unique temporary folder. readdir lists names. opendir walks a folder. stat and lstat return size, mode, and times. access checks that a path is usable. chmod and chown change mode and owner. utimes changes times. realpath resolves symlinks. symlink, link, and readlink manage links. watch and watchFile report changes. unwatchFile stops watchFile. existsSync is the sync existence check. exists is old and should not be used. createReadStream and createWriteStream stream a file. glob finds paths by a pattern.",
+          "Output: after writeFileSync(\"note.txt\", \"hello\") and readFileSync(\"note.txt\", \"utf8\"), the console prints hello. existsSync(\"note.txt\") prints true."
         ],
         "hindi": [
-          "fs module files padhta, likhta, aur delete karta hai. Naye code mein fs/promises prefer karo. String chahiye to utf8 do. Encoding na do to Buffer milta hai.",
-          "readFileSync jaise sync methods main thread ko rokte hain. Chhote script mein theek hain. Server mein async methods use karo, taaki ek slow disk call har request ko na rok de."
+          "Promise API ke liye import fs from \"node:fs/promises\" likho. Callback aur sync API ke liye import fs from \"node:fs\". Promise method promise deta hai. Sync method main thread ko rokta hai. Server mein promise ya callback form use karo.",
+          "File methods: readFile file padhta hai. writeFile file replace karta hai. appendFile end mein jodta hai. copyFile copy karta hai. cp file ya folder copy karta hai. rename move ya rename karta hai. unlink file delete karta hai. rm file ya folder delete karta hai, aur { recursive: true } poora folder tree hataata hai. truncate file chhota karta hai. open handle deta hai. close use band karta hai. read aur write us handle par kaam karte hain.",
+          "Folder methods: mkdir folder banata hai. Nested folders ke liye { recursive: true }. mkdtemp unique temporary folder banata hai. readdir naam list karta hai. stat aur lstat size, mode, aur time dete hain. access path usable hai ya nahi check karta hai. chmod aur chown mode aur owner badalte hain. realpath symlink resolve karta hai. symlink, link, aur readlink links sambhalte hain. watch changes batata hai. existsSync sync existence check hai. exists purana hai, use mat karo. createReadStream aur createWriteStream file stream karte hain. glob pattern se paths dhoondhta hai.",
+          "Output: writeFileSync(\"note.txt\", \"hello\") ke baad readFileSync hello print karta hai. existsSync(\"note.txt\") true print karta hai."
         ],
-        "code": "import fs from \"node:fs/promises\";\n\nawait fs.writeFile(\"note.txt\", \"hello\\n\");\nconst text = await fs.readFile(\"note.txt\", \"utf8\");"
+        "code": "import fs from \"node:fs\";\n\nfs.writeFileSync(\"note.txt\", \"hello\");\nconsole.log(fs.readFileSync(\"note.txt\", \"utf8\"));\nconsole.log(fs.existsSync(\"note.txt\"));\n// Output:\n// hello\n// true"
       },
       {
         "id": "node-path",
-        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
-        "title": "The path module",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-path",
+        "title": "path: build file paths",
         "english": [
-          "path builds file paths without hard-coding slashes. path.join cleans segments. path.resolve turns a relative path into an absolute one from the current working directory.",
-          "Do not build paths with string addition. Windows uses backslashes. path hides that difference. path.basename and path.extname read the file name and extension."
+          "Import it with import path from \"node:path\". It builds paths so you do not hard-code slashes. path.win32 always uses Windows rules. path.posix always uses forward slashes. The default path follows the operating system you are on.",
+          "Methods: join(...parts) cleans and joins segments. resolve(...parts) makes an absolute path from the current folder. normalize cleans . and .. and repeated slashes. isAbsolute tells you if a path starts from the root. relative(from, to) builds the path from one place to another. dirname returns the folder. basename(path, ext) returns the file name, and the optional ext strips that extension. extname returns the extension, including the dot. parse splits a path into root, dir, base, ext, and name. format builds a path back from that object. matchesGlob checks a path against a pattern. sep is the slash character. delimiter is the PATH separator, semicolon on Windows and colon elsewhere.",
+          "Output: path.posix.basename(\"/data/note.txt\") prints note.txt. path.posix.extname prints .txt. path.posix.dirname prints /data. path.posix.join(\"data\", \"note.txt\") prints data/note.txt."
         ],
         "hindi": [
-          "path file paths banata hai bina slashes hard-code kiye. path.join segments saaf karta hai. path.resolve relative path ko current working directory se absolute banata hai.",
-          "Paths string jodkar mat banao. Windows backslash use karta hai. path ye farq chhupa deta hai. path.basename aur path.extname file ka naam aur extension dete hain."
+          "Import path from \"node:path\" se import karo. Ye paths banata hai taaki aap slash hard-code na karo. path.win32 hamesha Windows rules use karta hai. path.posix hamesha forward slash use karta hai. Default path aapke operating system ka hota hai.",
+          "Methods: join segments jodta hai. resolve current folder se absolute path banata hai. normalize . aur .. saaf karta hai. isAbsolute batata hai path root se shuru hai ya nahi. relative ek jagah se doosri jagah ka path banata hai. dirname folder deta hai. basename file ka naam deta hai. extname extension deta hai, dot ke saath. parse path ko root, dir, base, ext, aur name mein todta hai. format us object se path wapas banata hai. matchesGlob pattern check karta hai. sep slash character hai. delimiter PATH separator hai.",
+          "Output: basename note.txt print karta hai. extname .txt print karta hai. dirname /data print karta hai. join data/note.txt print karta hai."
         ],
-        "code": "import path from \"node:path\";\n\nconst file = path.join(process.cwd(), \"data\", \"note.txt\");"
+        "code": "import path from \"node:path\";\n\nconsole.log(path.posix.basename(\"/data/note.txt\"));\nconsole.log(path.posix.extname(\"/data/note.txt\"));\nconsole.log(path.posix.dirname(\"/data/note.txt\"));\nconsole.log(path.posix.join(\"data\", \"note.txt\"));\n// Output:\n// note.txt\n// .txt\n// /data\n// data/note.txt"
       },
       {
         "id": "node-events",
-        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
-        "title": "EventEmitter",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-events",
+        "title": "events: EventEmitter methods",
         "english": [
-          "Many Node objects are event emitters. You subscribe with on and publish with emit. once runs a listener a single time. removeListener drops it.",
-          "HTTP servers and streams are built on this idea. If you add listeners in a loop and never remove them, the process leaks memory. Node warns when one emitter has too many listeners."
+          "Import it with import { EventEmitter } from \"node:events\". An emitter is an object that can announce named events. HTTP servers, streams, and many other Node objects inherit this behavior.",
+          "Methods: on(event, listener) and addListener subscribe. once subscribes for a single call. prependListener and prependOnceListener put the listener at the front. emit(event, ...args) runs the listeners and returns true if at least one ran. off and removeListener remove one listener. You must pass the same function you subscribed. removeAllListeners(event) clears one event, or every event if you omit the name. listeners and rawListeners return the current list. listenerCount returns how many there are. eventNames returns the names that still have listeners. setMaxListeners and getMaxListeners control the warning limit. The default warning appears around 10 listeners. The special error event crashes the process if you emit it and nobody is listening.",
+          "Output: the example prints ok, then true, then 0, then false. emit returns true when a listener ran. listenerCount is 0 because once already removed itself. The second emit returns false."
         ],
         "hindi": [
-          "Kai Node objects event emitters hain. on se suno aur emit se bhejo. once listener ko ek baar chalata hai. removeListener use hata deta hai.",
-          "HTTP servers aur streams isi idea par bane hain. Agar loop mein listeners jodte raho aur kabhi na hatao, process memory leak karti hai. Ek emitter par bahut listeners hon to Node warn karta hai."
+          "Import { EventEmitter } from \"node:events\" se import karo. Emitter woh object hai jo naam wale events announce kar sakta hai. HTTP servers aur streams isi behavior ko inherit karte hain.",
+          "Methods: on aur addListener subscribe karte hain. once sirf ek baar chalta hai. prependListener listener ko aage lagata hai. emit listeners chalata hai aur true deta hai agar koi listener tha. off aur removeListener ek listener hataate hain. Wahi function do jo subscribe kiya tha. removeAllListeners sab hata deta hai. listeners list deta hai. listenerCount count deta hai. eventNames naam deta hai. setMaxListeners warning limit set karta hai. error event sunne wala na ho to process crash ho sakti hai.",
+          "Output: example ok print karta hai, phir true, phir 0, phir false. emit true deta hai jab listener chala. listenerCount 0 hai kyunki once khud hat chuka hai. Doosra emit false deta hai."
         ],
-        "code": "import { EventEmitter } from \"node:events\";\n\nconst bus = new EventEmitter();\nbus.on(\"ping\", (name) => console.log(name));\nbus.emit(\"ping\", \"ok\");"
+        "code": "import { EventEmitter } from \"node:events\";\n\nconst bus = new EventEmitter();\nbus.once(\"ping\", (name) => console.log(name));\nconsole.log(bus.emit(\"ping\", \"ok\"));\nconsole.log(bus.listenerCount(\"ping\"));\nconsole.log(bus.emit(\"ping\", \"again\"));\n// Output:\n// ok\n// true\n// 0\n// false"
       },
       {
         "id": "node-buffer",
-        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
-        "title": "Buffers",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-buffer",
+        "title": "buffer: bytes and encodings",
         "english": [
-          "A Buffer is a fixed block of bytes. Files, network packets, and images are bytes, not JavaScript strings. Strings are text. Buffers are raw data.",
-          "Buffer.from creates one from a string or array. toString decodes it. Common encodings are utf8, hex, and base64. Do not assume every file is utf8 text."
+          "Buffer is global in Node, so you can use it without an import. It holds raw bytes. A string is text. A buffer is the bytes behind that text, a file, or a network packet.",
+          "Constructors and static methods: Buffer.from(value, encoding) creates a buffer from a string, array, or another buffer. Buffer.alloc(size, fill) creates a zeroed or filled buffer. Buffer.allocUnsafe(size) is faster but may contain old memory, so fill it before use. Buffer.concat(list, totalLength) joins buffers. Buffer.isBuffer(value) checks the type. Buffer.compare(a, b) sorts buffers. Buffer.byteLength(string, encoding) counts bytes, which is not always the same as string length. Buffer.isEncoding checks a name such as utf8, hex, base64, or latin1.",
+          "Instance methods: buf.toString(encoding) decodes bytes. buf.write(string, offset, encoding) writes into an existing buffer. buf.copy(target) copies bytes. buf.subarray(start, end) is a view of the same memory. buf.slice is the older name. buf.equals checks same bytes. buf.compare orders two buffers. buf.indexOf, buf.lastIndexOf, and buf.includes search. buf.fill fills a range. buf.readUInt8, buf.readUInt16BE, buf.readUInt32BE, buf.readInt8, and the matching write methods read and write numbers. LE means little-endian and BE means big-endian. buf.swap16 and buf.swap32 swap byte order. buf.toJSON returns { type: \"Buffer\", data: [...] }.",
+          "Output: Buffer.from(\"hello\").toString(\"hex\") prints 68656c6c6f. Buffer.byteLength(\"hello\") prints 5. \"hello\".length is also 5, but a character such as é can be more than one byte."
         ],
         "hindi": [
-          "Buffer bytes ka fixed block hai. Files, network packets, aur images bytes hain, JavaScript strings nahi. String text hai. Buffer raw data hai.",
-          "Buffer.from string ya array se buffer banata hai. toString use decode karta hai. Common encodings utf8, hex, aur base64 hain. Har file ko utf8 text mat maano."
+          "Buffer Node mein global hai, isliye bina import ke chal jata hai. Ye raw bytes rakhta hai. String text hai. Buffer un bytes ko rakhta hai jo file ya network packet mein hote hain.",
+          "Static methods: Buffer.from string ya array se buffer banata hai. Buffer.alloc size ka saaf buffer banata hai. Buffer.allocUnsafe tez hai par purani memory ho sakti hai. Buffer.concat buffers jodta hai. Buffer.isBuffer type check karta hai. Buffer.byteLength bytes ginata hai, jo hamesha string length nahi hota. Encodings utf8, hex, base64, aur latin1 hain.",
+          "Instance methods: toString bytes ko text banata hai. write existing buffer mein likhta hai. copy bytes copy karta hai. subarray usi memory ka view hai. equals same bytes check karta hai. indexOf aur includes search karte hain. fill range bharta hai. readUInt8 aur write methods numbers padhte aur likhte hain. BE big-endian hai aur LE little-endian.",
+          "Output: hello ka hex 68656c6c6f hai. byteLength 5 hai."
         ],
-        "code": "const raw = Buffer.from(\"hello\", \"utf8\");\nconsole.log(raw.toString(\"hex\"));"
+        "code": "const raw = Buffer.from(\"hello\", \"utf8\");\nconsole.log(raw.toString(\"hex\"));\nconsole.log(Buffer.byteLength(\"hello\"));\nconsole.log(Buffer.isBuffer(raw));\n// Output:\n// 68656c6c6f\n// 5\n// true"
       },
       {
         "id": "node-streams",
-        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
-        "title": "Streams",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-stream",
+        "title": "stream: chunked data",
         "english": [
-          "A stream moves data in chunks so you do not load a whole file into memory. Readable produces chunks. Writable accepts them. Transform changes them on the way. Duplex does both.",
-          "pipe connects a readable stream to a writable one. pipeline from node:stream/promises is safer because it forwards errors and destroys the streams. Backpressure means the writer is slower than the reader. Respect it or memory grows."
+          "Import classes from \"node:stream\" and pipeline from \"node:stream/promises\". A stream moves data in chunks so a large file never has to sit fully in memory.",
+          "Classes: Readable produces chunks. Writable accepts them. Duplex is both. Transform changes chunks as they pass. PassThrough is a Duplex that does not change the bytes. Readable.from(array) turns an array or async iterable into a readable stream.",
+          "Readable methods: read, pause, resume, pipe, unpipe, unshift, wrap, destroy, destroyed, readableEnded. Events include data, end, error, and close. Writable methods: write, end, cork, uncork, destroy. write returns false when the buffer is full. Wait for the drain event before writing more. That waiting is backpressure. Transform implements _transform and optional _flush.",
+          "Helpers: pipeline(source, ...transforms, destination) connects streams and forwards errors. finished(stream) resolves when a stream ends or errors. stream.compose chains transforms. stream.duplexPair makes a connected pair. stream.addAbortSignal cancels a stream from an AbortSignal.",
+          "Output: piping a readable stream of the letters a and b into process.stdout prints ab. pipeline from in.txt to out.txt copies the file and prints nothing when it succeeds."
         ],
         "hindi": [
-          "Stream data ko chunks mein chalata hai taaki poori file memory mein na aaye. Readable chunks banata hai. Writable unhe leta hai. Transform beech mein badalta hai. Duplex dono karta hai.",
-          "pipe readable ko writable se jodta hai. node:stream/promises ka pipeline behtar hai kyunki errors aage bhejta hai aur streams destroy karta hai. Backpressure ka matlab writer reader se slow hai. Ise ignore karoge to memory badhegi."
+          "Classes \"node:stream\" se import karo aur pipeline \"node:stream/promises\" se. Stream data ko chunks mein chalata hai taaki badi file poori memory mein na aaye.",
+          "Classes: Readable chunks banata hai. Writable unhe leta hai. Duplex dono hai. Transform beech mein badalta hai. PassThrough bytes ko nahi badalta. Readable.from array ko stream bana deta hai.",
+          "Readable methods: read, pause, resume, pipe, unpipe, destroy. Writable methods: write, end, cork, uncork. write false deta hai jab buffer full ho. drain event ka intezar karo. Yahi backpressure hai.",
+          "Helpers: pipeline streams jodta hai aur errors aage bhejta hai. finished tab resolve hota hai jab stream khatam ho. compose transforms jodta hai.",
+          "Output: a aur b ki stream stdout par ab print karti hai. pipeline file copy karta hai aur success par kuch print nahi karta."
         ],
-        "code": "import fs from \"node:fs\";\nimport { pipeline } from \"node:stream/promises\";\n\nawait pipeline(\n  fs.createReadStream(\"in.txt\"),\n  fs.createWriteStream(\"out.txt\"),\n);"
+        "code": "import { Readable } from \"node:stream\";\n\nconst source = Readable.from([\"a\", \"b\"]);\nsource.on(\"data\", (chunk) => process.stdout.write(chunk));\n// Output:\n// ab"
+      },
+      {
+        "id": "node-os",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-os",
+        "title": "os: the operating system",
+        "english": [
+          "Import it with import os from \"node:os\". It reads facts about the machine. It does not change system settings.",
+          "Methods: arch() is the CPU architecture, such as x64 or arm64. platform() is win32, darwin, or linux. type(), release(), version(), and machine() describe the operating system. hostname() is the computer name. homedir() is the user home folder. tmpdir() is the temporary folder. userInfo() returns username, uid, gid, shell, and homedir. endianness() is LE or BE. cpus() returns one object per logical CPU, with model and speed. freemem() and totalmem() are byte counts. availableParallelism() is a suggested worker count. uptime() is seconds since boot. loadavg() is the 1, 5, and 15 minute load on Unix, and zeros on Windows. networkInterfaces() lists addresses. constants holds signal numbers and priority values. getPriority and setPriority read and change the process priority.",
+          "Output: os.platform() prints win32 on Windows, darwin on macOS, and linux on Linux. os.arch() often prints x64 or arm64. The exact strings depend on the computer."
+        ],
+        "hindi": [
+          "Import os from \"node:os\" se import karo. Ye machine ki jaankari padhta hai. Ye system settings nahi badalta.",
+          "Methods: arch() CPU architecture hai, jaise x64 ya arm64. platform() win32, darwin, ya linux hai. hostname() computer ka naam hai. homedir() user ka home folder hai. tmpdir() temporary folder hai. cpus() har CPU ka model aur speed deta hai. freemem() aur totalmem() bytes mein hain. uptime() boot ke baad ke seconds hain. networkInterfaces() addresses list karta hai.",
+          "Output: Windows par platform() win32 print karta hai. macOS par darwin. Linux par linux. arch() aksar x64 ya arm64 hota hai."
+        ],
+        "code": "import os from \"node:os\";\n\nconsole.log(os.platform());\nconsole.log(os.arch());\nconsole.log(os.cpus().length);\n// Output depends on the computer.\n// Windows example:\n// win32\n// x64\n// 8"
+      },
+      {
+        "id": "node-url",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-url",
+        "title": "url: parse and build URLs",
+        "english": [
+          "The modern API is the global URL class and URLSearchParams. You do not need to import them. The old url.parse, url.format, and url.resolve still exist on \"node:url\", but new code should use URL.",
+          "URL properties: href is the whole string. origin is protocol plus host. protocol includes the colon, such as https:. username and password come from the userinfo part. host includes the port. hostname does not. port is a string. pathname is the path. search includes the question mark. searchParams is a URLSearchParams object. hash includes the #.",
+          "URL methods: the constructor new URL(input, base) parses a string. If input is relative, base fills in the missing origin. toString and toJSON return href. canParse(input, base) returns true or false without throwing. URL.revokeObjectURL and URL.createObjectURL are browser APIs and are not the Node tools you want here.",
+          "Helpers from \"node:url\": pathToFileURL turns a file path into a file: URL. fileURLToPath does the reverse. domainToASCII and domainToUnicode convert international domain names. urlToHttpOptions turns a URL into the options object used by http.request.",
+          "URLSearchParams methods: get, getAll, has, set, append, delete, sort, keys, values, entries, forEach, toString. toString does not include the leading question mark.",
+          "Output: for https://example.com:443/docs?q=node#top, hostname prints example.com, pathname prints /docs, searchParams.get(\"q\") prints node, and hash prints #top."
+        ],
+        "hindi": [
+          "Modern API global URL class aur URLSearchParams hai. Import zaroori nahi. Purane url.parse ko naye code mein avoid karo.",
+          "Properties: href poora string hai. protocol colon ke saath hota hai, jaise https:. hostname port ke bina hota hai. host port ke saath. pathname path hai. search question mark ke saath hai. hash # ke saath hai.",
+          "new URL(input, base) string parse karta hai. canParse true ya false deta hai, throw nahi karta. pathToFileURL file path ko file: URL banata hai. fileURLToPath ulta karta hai.",
+          "URLSearchParams methods: get, getAll, has, set, append, delete, sort, toString. toString question mark nahi lagata.",
+          "Output: hostname example.com hai, pathname /docs hai, q ki value node hai, aur hash #top hai."
+        ],
+        "code": "const url = new URL(\"https://example.com:443/docs?q=node#top\");\nconsole.log(url.hostname);\nconsole.log(url.pathname);\nconsole.log(url.searchParams.get(\"q\"));\nconsole.log(url.hash);\n// Output:\n// example.com\n// /docs\n// node\n// #top"
+      },
+      {
+        "id": "node-util",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-util",
+        "title": "util: helpers",
+        "english": [
+          "Import it with import util from \"node:util\". It is a toolbox. It is not a replacement for your own functions.",
+          "Methods: format(template, ...args) works like printf. %s is a string, %d is a number, %j is JSON, and %% is a percent sign. inspect(value, options) makes a debug string. colors, depth, and showHidden are useful options. isDeepStrictEqual(a, b) compares values the way assert.deepStrictEqual does. promisify(fn) turns an error-first callback function into a function that returns a promise. callbackify does the reverse. deprecate(fn, message) wraps a function so the first call warns. debuglog(section) returns a logger that prints only when NODE_DEBUG includes that section. parseArgs(config) reads process.argv into values and positionals. stripVTControlCharacters removes color codes. styleText(style, text) adds terminal color. types.isPromise, types.isDate, types.isNativeError, and the other types.is checks identify boxed and built-in objects. getSystemErrorName(code) turns a numeric errno into a name such as ENOENT.",
+          "Output: util.format(\"id=%d\", 3) prints id=3. util.isDeepStrictEqual({ a: 1 }, { a: 1 }) prints true."
+        ],
+        "hindi": [
+          "Import util from \"node:util\" se import karo. Ye helper toolbox hai.",
+          "Methods: format printf ki tarah kaam karta hai. %s string hai, %d number hai, %j JSON hai. inspect debug string banata hai. promisify error-first callback ko promise function bana deta hai. callbackify ulta karta hai. parseArgs process.argv padhta hai. types.isPromise jaise checks object ka type batate hain.",
+          "Output: format(\"id=%d\", 3) id=3 print karta hai. isDeepStrictEqual true print karta hai jab dono objects same hon."
+        ],
+        "code": "import util from \"node:util\";\n\nconsole.log(util.format(\"id=%d\", 3));\nconsole.log(util.isDeepStrictEqual({ a: 1 }, { a: 1 }));\n// Output:\n// id=3\n// true"
+      },
+      {
+        "id": "node-crypto",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-crypto",
+        "title": "crypto: hashes and random bytes",
+        "english": [
+          "Import it with import crypto from \"node:crypto\". Use it for hashes, random values, HMAC, passwords, and signatures. Do not invent your own cipher.",
+          "Hash and HMAC: createHash(algorithm) then update(data) then digest(encoding). getHashes() lists names such as sha256 and sha512. createHmac(algorithm, key) is a hash that also uses a secret. digest encodings are hex, base64, and base64url.",
+          "Random methods: randomBytes(size) returns a buffer. randomUUID() returns an RFC 4122 id. randomInt(min, max) returns an integer, and max is excluded. randomFill and randomFillSync fill an existing buffer.",
+          "Keys and ciphers: generateKeyPair and generateKeyPairSync make key pairs. publicEncrypt and privateDecrypt use them. createCipheriv and createDecipheriv encrypt with a key and an initialization vector. createSign and createVerify sign and check a signature. pbkdf2, pbkdf2Sync, scrypt, and scryptSync turn a password into a key. timingSafeEqual compares two buffers without leaking timing. Do not compare secrets with ===.",
+          "Output: sha256 of the text hello, as hex, is 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824. randomUUID() changes every call, so there is no single correct string."
+        ],
+        "hindi": [
+          "Import crypto from \"node:crypto\" se import karo. Hashes, random values, HMAC, passwords, aur signatures ke liye use karo. Apna cipher mat banao.",
+          "createHash algorithm leta hai, update data leta hai, digest encoding mein result deta hai. createHmac secret key ke saath hash hai. randomBytes buffer deta hai. randomUUID id deta hai. randomInt integer deta hai. createCipheriv encrypt karta hai. pbkdf2 password se key banata hai. timingSafeEqual secrets compare karta hai. Secrets ko === se mat compare karo.",
+          "Output: hello ka sha256 hex 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824 hai. randomUUID har call par badalta hai."
+        ],
+        "code": "import crypto from \"node:crypto\";\n\nconst hash = crypto.createHash(\"sha256\").update(\"hello\").digest(\"hex\");\nconsole.log(hash);\n// Output:\n// 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+      },
+      {
+        "id": "node-zlib",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-zlib",
+        "title": "zlib: compress and decompress",
+        "english": [
+          "Import it with import zlib from \"node:zlib\". Sync methods end in Sync and return a buffer. The same names without Sync take a callback. Wrap those with util.promisify when you want a promise.",
+          "Sync and callback methods: gzipSync and gzip compress with gzip. gunzipSync and gunzip undo it. deflateSync and inflateSync use the raw deflate format. brotliCompressSync and brotliDecompressSync use Brotli. unzipSync accepts either gzip or deflate. The stream factories are createGzip, createGunzip, createDeflate, createInflate, createBrotliCompress, and createBrotliDecompress. constants holds flush and level values such as Z_BEST_COMPRESSION.",
+          "Output: gzipSync of the text hello returns a buffer whose first bytes are the gzip header 1f8b. gunzipSync of that buffer returns hello."
+        ],
+        "hindi": [
+          "Import zlib from \"node:zlib\" se import karo. gzipSync compress karta hai. gunzipSync wapas text banata hai. deflateSync aur inflateSync deflate format hain. brotliCompressSync Brotli use karta hai. createGzip stream factory hai.",
+          "Output: hello ka gzip buffer 1f8b se shuru hota hai. gunzipSync us buffer se hello wapas deta hai."
+        ],
+        "code": "import zlib from \"node:zlib\";\n\nconst packed = zlib.gzipSync(\"hello\");\nconsole.log(packed.subarray(0, 2).toString(\"hex\"));\nconsole.log(zlib.gunzipSync(packed).toString());\n// Output:\n// 1f8b\n// hello"
+      },
+      {
+        "id": "node-dns",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-dns",
+        "title": "dns: look up host names",
+        "english": [
+          "Import the promise API with import dns from \"node:dns/promises\". The callback API is import dns from \"node:dns\". A lookup uses the operating system resolver, the same idea as getaddrinfo. resolve asks a DNS server for a specific record and does not use the hosts file the same way.",
+          "Methods: lookup(hostname) returns an address and family, 4 or 6. lookupService(address, port) reverses that to a host name and service. resolve(hostname, rrtype) returns records. resolve4 and resolve6 return A and AAAA addresses. resolveMx returns mail servers. resolveTxt returns text records. resolveCname, resolveNs, resolveSrv, resolvePtr, resolveSoa, resolveCaa, and resolveNaptr read those record types. resolveAny returns mixed records. reverse(ip) finds host names for an address. setServers and getServers change the DNS servers for resolve, not for lookup. setDefaultResultOrder(\"ipv4first\" or \"verbatim\") changes lookup order.",
+          "Output: lookup(\"localhost\") usually prints 127.0.0.1 and family 4. A public name such as example.com can change, so do not hard-code that address in a test."
+        ],
+        "hindi": [
+          "Promise API node:dns/promises hai. lookup operating system resolver use karta hai. resolve DNS server se ek record type maangta hai.",
+          "Methods: lookup address aur family deta hai. resolve4 A records deta hai. resolve6 AAAA records. resolveMx mail servers. resolveTxt text records. reverse IP se host name dhoondhta hai. setServers DNS servers badalta hai.",
+          "Output: lookup(\"localhost\") aksar 127.0.0.1 aur family 4 deta hai."
+        ],
+        "code": "import dns from \"node:dns/promises\";\n\nconst found = await dns.lookup(\"localhost\");\nconsole.log(found);\n// Output is usually:\n// { address: '127.0.0.1', family: 4 }"
+      },
+      {
+        "id": "node-net",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-net",
+        "title": "net: TCP sockets",
+        "english": [
+          "Import it with import net from \"node:net\". This is TCP, not HTTP. HTTP is built on top of it. Use net when you speak a custom protocol or you want a raw socket.",
+          "Methods: createServer(connectionListener) makes a server. server.listen(port) starts it. server.close stops new connections. server.address() returns the bound port and address. createConnection(options) and connect(port, host) open a client socket. isIP(input) returns 0, 4, or 6. isIPv4 and isIPv6 return booleans. BlockList checks whether an address is blocked.",
+          "Socket methods: write(data) sends bytes and returns false when the kernel buffer is full. end() half-closes the write side. destroy() drops the socket. pause, resume, and the data event work because a socket is a Duplex stream. setTimeout, setKeepAlive, setNoDelay, and setEncoding tune the socket. remoteAddress and localPort describe the connection.",
+          "Output: isIP(\"127.0.0.1\") prints 4. isIP(\"::1\") prints 6. isIP(\"hello\") prints 0. A server that writes pong and ends will make the client print pong."
+        ],
+        "hindi": [
+          "Import net from \"node:net\" se import karo. Ye TCP hai, HTTP nahi. HTTP isi ke upar banta hai.",
+          "Methods: createServer server banata hai. listen port par sunta hai. close naye connections rokta hai. createConnection client socket kholta hai. isIP 0, 4, ya 6 deta hai. Socket write bytes bhejta hai. end write side band karta hai. destroy socket gira deta hai.",
+          "Output: isIP(\"127.0.0.1\") 4 print karta hai. isIP(\"::1\") 6 print karta hai. isIP(\"hello\") 0 print karta hai."
+        ],
+        "code": "import net from \"node:net\";\n\nconsole.log(net.isIP(\"127.0.0.1\"));\nconsole.log(net.isIP(\"::1\"));\nconsole.log(net.isIP(\"hello\"));\n// Output:\n// 4\n// 6\n// 0"
+      },
+      {
+        "id": "node-readline",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-readline",
+        "title": "readline: line by line input",
+        "english": [
+          "Import it with import readline from \"node:readline\", or readline from \"node:readline/promises\" when you want question() to return a promise. It reads a stream one line at a time. The usual stream is process.stdin.",
+          "Methods: createInterface({ input, output, prompt }) builds the interface. question(query) asks and waits for one line. setPrompt and prompt show a prompt. on(\"line\", listener) fires for every line, without the trailing newline. on(\"close\") fires after close(). close() stops reading. [Symbol.asyncIterator] lets you write for await (const line of rl). cursorTo, moveCursor, and clearLine from \"node:readline\" move the terminal cursor. emitKeypressEvents(stream) turns key presses into keypress events when the terminal is in raw mode.",
+          "Output: if the user types Ada and presses Enter, question(\"Name: \") resolves to the string Ada, without the newline."
+        ],
+        "hindi": [
+          "Promise version node:readline/promises hai. Ye stream ko line by line padhta hai. Aksar stream process.stdin hoti hai.",
+          "Methods: createInterface interface banata hai. question ek line ka intezar karta hai. on(\"line\") har line par chalta hai. close padhna band karta hai. clearLine aur cursorTo terminal cursor chalati hain.",
+          "Output: user Ada likh kar Enter dabaye to question ka result Ada hota hai, newline ke bina."
+        ],
+        "code": "import readline from \"node:readline/promises\";\nimport { stdin, stdout } from \"node:process\";\n\nconst rl = readline.createInterface({ input: stdin, output: stdout });\nconst name = await rl.question(\"Name: \");\nconsole.log(`Hello ${name}`);\nrl.close();\n// If the user types Ada, output is:\n// Name: Ada\n// Hello Ada"
+      },
+      {
+        "id": "node-assert",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-assert",
+        "title": "assert: check what you expect",
+        "english": [
+          "Import the strict set with import assert from \"node:assert/strict\". The loose import from \"node:assert\" uses == in a few old methods. Prefer strict so 1 and \"1\" are not treated as equal.",
+          "Methods: ok(value) throws if value is falsy. equal(actual, expected) uses Object.is. notEqual is the opposite. deepEqual and deepStrictEqual compare object trees. notDeepEqual and notDeepStrictEqual are the opposites. strictEqual is the same idea as equal on the strict import. throws(fn, error) expects a function to throw. doesNotThrow expects silence. rejects(fn) and doesNotReject expect a promise. match and doesNotMatch test a string against a regular expression. ifError(value) throws when value is an error. fail(message) always throws. AssertionError is the error class.",
+          "Output: equal(1, \"1\") throws AssertionError because the types differ. equal(2 + 2, 4) prints nothing and the next line runs. A thrown assert stops the script unless you catch it."
+        ],
+        "hindi": [
+          "Strict set node:assert/strict se import karo. Isme 1 aur \"1\" equal nahi maane jaate.",
+          "Methods: ok falsy par throw karta hai. equal Object.is use karta hai. deepEqual objects compare karta hai. throws expect karta hai ki function throw kare. rejects promise ke liye hai. match regex check karta hai. fail hamesha throw karta hai.",
+          "Output: equal(1, \"1\") AssertionError throw karta hai. equal(2 + 2, 4) kuch print nahi karta aur agla line chalta hai."
+        ],
+        "code": "import assert from \"node:assert/strict\";\n\nassert.equal(2 + 2, 4);\nconsole.log(\"passed\");\n// Output:\n// passed\n// assert.equal(1, \"1\") throws AssertionError"
+      },
+      {
+        "id": "node-querystring",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-querystring",
+        "title": "querystring: old query parser",
+        "english": [
+          "Import it with import querystring from \"node:querystring\". It parses and builds URL query strings. New code should prefer URLSearchParams. This module remains because older tutorials and packages still call it.",
+          "Methods: parse(str, sep, eq, options) turns a=1&b=2 into an object. stringify(obj, sep, eq) does the reverse. escape and unescape encode and decode a component. The default separator is & and the default assignment character is =.",
+          "Output: parse(\"a=1&b=2\") prints { a: \"1\", b: \"2\" }. Notice the values are strings, not numbers. stringify({ a: 1, b: 2 }) prints a=1&b=2."
+        ],
+        "hindi": [
+          "Import querystring from \"node:querystring\" se import karo. Naye code mein URLSearchParams behtar hai. Ye module purane code ke liye ab bhi hai.",
+          "Methods: parse string ko object banata hai. stringify object ko query string banata hai. escape aur unescape component encode aur decode karte hain.",
+          "Output: parse(\"a=1&b=2\") { a: \"1\", b: \"2\" } print karta hai. Values strings hain, numbers nahi. stringify a=1&b=2 print karta hai."
+        ],
+        "code": "import querystring from \"node:querystring\";\n\nconsole.log(querystring.parse(\"a=1&b=2\"));\nconsole.log(querystring.stringify({ a: 1, b: 2 }));\n// Output:\n// { a: '1', b: '2' }\n// a=1&b=2"
+      },
+      {
+        "id": "node-https",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-https",
+        "title": "https: TLS requests and servers",
+        "english": [
+          "Import it with import https from \"node:https\". It is the http module plus TLS. The request and response objects are the same shapes you already use with http. Prefer global fetch for a simple client. Use https when you need a custom agent, client certificate, or a TLS server.",
+          "Methods: get(url, callback) performs GET and calls you with the response. request(url, options, callback) starts any method. You must call req.end() after request, or the body is never sent. createServer(options, listener) starts a TLS server. options.key and options.cert are the private key and certificate. Agent and globalAgent pool sockets. request methods on the client are write, end, abort, setTimeout, getHeader, setHeader, and removeHeader.",
+          "Output: https.get of a URL prints the status code, such as 200, when the response headers arrive. The body still has to be read from the response stream."
+        ],
+        "hindi": [
+          "Import https from \"node:https\" se import karo. Ye http plus TLS hai. Simple client ke liye fetch aasaan hai. https tab use karo jab custom agent, client certificate, ya TLS server chahiye.",
+          "Methods: get GET karta hai. request koi bhi method start karta hai. request ke baad end() call karna zaroori hai. createServer TLS server start karta hai. options.key aur options.cert key aur certificate hain.",
+          "Output: https.get status code print karta hai, jaise 200, jab headers aa jaate hain. Body response stream se padhni padti hai."
+        ],
+        "code": "import https from \"node:https\";\n\nhttps.get(\"https://example.com\", (res) => {\n  console.log(res.statusCode);\n});\n// Output:\n// 200"
+      },
+      {
+        "id": "node-string-decoder",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-string_decoder",
+        "title": "string_decoder: split multibyte characters",
+        "english": [
+          "Import it with import { StringDecoder } from \"node:string_decoder\". A TCP chunk or file chunk can split a multibyte character in half. If you call buffer.toString on each chunk, that character becomes garbage. StringDecoder keeps the incomplete bytes until the next chunk.",
+          "Methods: new StringDecoder(encoding) creates the decoder. The default encoding is utf8. write(buffer) returns the complete characters and holds a partial character back. end() flushes what remains, so call it when the stream closes. There is no other method. The class is small on purpose.",
+          "Output: writing the euro sign € as utf8 takes three bytes, 0xe2 0x82 0xac. write of only the first two bytes prints an empty string. write of the last byte, or end(), then prints €."
+        ],
+        "hindi": [
+          "Import { StringDecoder } from \"node:string_decoder\" se import karo. Ek chunk multibyte character ko beech mein kaat sakta hai. Har chunk par toString garbage bana sakta hai. StringDecoder adhoore bytes agle chunk tak rakhta hai.",
+          "Methods: new StringDecoder(encoding) decoder banata hai. write poore characters deta hai aur adhoora character rok kar rakhta hai. end bacha hua flush karta hai. Aur koi method nahi hai.",
+          "Output: euro sign ke pehle do bytes par write khaali string deta hai. Aakhri byte ya end() € print karta hai."
+        ],
+        "code": "import { StringDecoder } from \"node:string_decoder\";\n\nconst decoder = new StringDecoder(\"utf8\");\nconst euro = Buffer.from(\"€\");\nconsole.log(JSON.stringify(decoder.write(euro.subarray(0, 2))));\nconsole.log(decoder.end(euro.subarray(2)));\n// Output:\n// \"\"\n// €"
+      },
+      {
+        "id": "node-tty",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-tty",
+        "title": "tty: is this a terminal",
+        "english": [
+          "Import it with import tty from \"node:tty\". It detects and controls a terminal. process.stdin and process.stdout are tty streams when you run the program in a terminal, and plain pipes when you redirect them to a file.",
+          "Methods: isatty(fd) returns true when a file descriptor is a terminal. ReadStream.prototype.setRawMode(true) sends key presses immediately instead of waiting for Enter. WriteStream.prototype.clearLine(dir), cursorTo(x, y), moveCursor(dx, dy), getWindowSize(), hasColors(), getColorDepth(), and clearScreenDown control the screen. columns and rows are the current size. The resize event fires when the window changes.",
+          "Output: tty.isatty(1) prints true when you run node in a terminal, because fd 1 is stdout. It prints false when you run node app.js > out.txt, because stdout is a file."
+        ],
+        "hindi": [
+          "Import tty from \"node:tty\" se import karo. Ye batata hai ki stream terminal hai ya nahi. Output file mein bhejne par stdout terminal nahi rehta.",
+          "Methods: isatty(fd) true deta hai jab descriptor terminal ho. setRawMode key presses turant bhejta hai. clearLine, cursorTo, aur moveCursor screen control karte hain. columns aur rows size hain.",
+          "Output: terminal mein tty.isatty(1) true hota hai. node app.js > out.txt par ye false hota hai."
+        ],
+        "code": "import tty from \"node:tty\";\n\nconsole.log(tty.isatty(1));\n// Output in a terminal:\n// true\n// Output when stdout is redirected to a file:\n// false"
       },
       {
         "id": "7723c4fe-f7d6-4f0b-bfb6-0965bd544626",
@@ -598,6 +831,18 @@
         "code": ""
       },
       {
+        "id": "1fd1600a-bcb5-48f1-8d9b-fdeb136767ec",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-advanced",
+        "title": "How to use Cluster",
+        "english": [
+          "Cluster module forks multiple processes that share the same server port. Each worker runs on its own thread and does not share memory with others, so shared state must go to a database or Redis. If a worker dies, the primary process can fork a replacement. Example: const cluster=require('cluster'); if(cluster.isMaster){ for(let i=0;i<4;i++) cluster.fork(); } else { require('http').createServer((req,res)=>res.end('Hello')).listen(8000); }"
+        ],
+        "hindi": [
+          "Cluster module forks multiple processes that share the same server port. Each worker runs on its own thread and does not share memory with others, so shared state must go to a database or Redis. If a worker dies, the primary process can fork a replacement. Example: const cluster=require('cluster'); if(cluster.isMaster){ for(let i=0;i<4;i++) cluster.fork(); } else { require('http').createServer((req,res)=>res.end('Hello')).listen(8000); }"
+        ],
+        "code": ""
+      },
+      {
         "id": "node-workers",
         "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-advanced",
         "title": "Worker threads",
@@ -624,6 +869,24 @@
           "Ek Node process un connections ko memory mein rakhta hai. Kai processes ko shared adapter chahiye, aksar Redis, taaki ek process ka message doosri process ke sockets tak pahunche."
         ],
         "code": ""
+      },
+      {
+        "id": "node-websockets-how-to",
+        "tabId": "a37047da-4332-4fb5-9a2b-0bc15b4af803-advanced",
+        "title": "How to use WebSockets",
+        "english": [
+          "A WebSocket stays open, so the server can push a message whenever it wants. Chat, live scores, and dashboards use that. You need a small Node server and a page that connects to it.",
+          "Install the ws package and listen on a port. When a browser connects, send a welcome message. When a message arrives, print it and send an echo back.",
+          "In the browser, open ws://localhost:8080. After the connection opens, send Hello server. When the server replies, print e.data.",
+          "Socket.IO is the same idea with a shorter API. It adds rooms and a fallback when a plain WebSocket is blocked. The server emits an event, and every client can listen for it."
+        ],
+        "hindi": [
+          "WebSocket khula rehta hai, isliye server jab chahe message bhej sakta hai. Chat, live scores, aur dashboards isi liye ise use karte hain. Ek chhota Node server chahiye aur ek page jo usse jude.",
+          "ws package install karke ek port par suno. Browser connect ho to welcome bhejo. Message aaye to use print karo aur echo wapas bhejo.",
+          "Browser mein ws://localhost:8080 kholo. Connection khulne ke baad Hello server bhejo. Server jawab de to e.data print karo.",
+          "Socket.IO wahi kaam chhote API se karta hai. Ye rooms jodta hai aur fallback deta hai jab seedha WebSocket block ho. Server event emit karta hai aur har client sun sakta hai."
+        ],
+        "code": "// Server: npm install ws\nconst WebSocket = require(\"ws\");\nconst wss = new WebSocket.Server({ port: 8080 });\n\nwss.on(\"connection\", (ws) => {\n  ws.send(\"Welcome!\");\n  ws.on(\"message\", (message) => {\n    console.log(\"Received:\", String(message));\n    ws.send(\"Echo: \" + message);\n  });\n});\n\n// Browser\nconst socket = new WebSocket(\"ws://localhost:8080\");\nsocket.onopen = () => socket.send(\"Hello server\");\nsocket.onmessage = (event) => console.log(\"Server says:\", event.data);\n\n// Socket.IO server: npm install socket.io\nconst io = require(\"socket.io\")(3000);\nio.on(\"connection\", (socket) => {\n  socket.emit(\"welcome\", \"Welcome to Socket.IO\");\n  socket.on(\"chat message\", (message) => {\n    io.emit(\"chat message\", message);\n  });\n});"
       }
     ],
     "tabs": [
@@ -640,8 +903,76 @@
         "title": "Async"
       },
       {
-        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-core",
-        "title": "Core modules"
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-fs",
+        "title": "fs"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-path",
+        "title": "path"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-events",
+        "title": "events"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-buffer",
+        "title": "buffer"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-stream",
+        "title": "stream"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-os",
+        "title": "os"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-url",
+        "title": "url"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-util",
+        "title": "util"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-crypto",
+        "title": "crypto"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-zlib",
+        "title": "zlib"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-dns",
+        "title": "dns"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-net",
+        "title": "net"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-readline",
+        "title": "readline"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-assert",
+        "title": "assert"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-querystring",
+        "title": "querystring"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-https",
+        "title": "https"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-string_decoder",
+        "title": "string_decoder"
+      },
+      {
+        "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-mod-tty",
+        "title": "tty"
       },
       {
         "id": "a37047da-4332-4fb5-9a2b-0bc15b4af803-http",

@@ -117,10 +117,12 @@ export function AddLessonForm({
   libraryId,
   tabs,
   activeTabId,
+  inline = false,
 }: {
   libraryId: string;
   tabs: ConceptTab[];
   activeTabId: string;
+  inline?: boolean;
 }) {
   const action = createLesson.bind(null, libraryId);
   const [state, formAction, pending] = useActionState(action, emptyActionState);
@@ -138,10 +140,14 @@ export function AddLessonForm({
   }, [state.savedAt]);
 
   return (
-    <div className="mt-6">
+    <div className={inline ? "shrink-0" : "mt-6"}>
       <button
         type="button"
-        className={primaryButtonClass}
+        className={
+          inline
+            ? "shrink-0 rounded-full px-3 py-1.5 text-sm font-medium text-primary hover:bg-surface"
+            : primaryButtonClass
+        }
         onClick={() => dialogRef.current?.showModal()}
       >
         Add lesson

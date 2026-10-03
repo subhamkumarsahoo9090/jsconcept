@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import TutorialView from "@/components/dashboard/TutorialView";
@@ -30,5 +31,9 @@ export default async function TutorialPage({
   const category = (await readLibraries()).find((library) => library.slug === slug);
   if (!category) notFound();
 
-  return <TutorialView category={category} />;
+  return (
+    <Suspense fallback={<p className="text-sm text-muted">Loading lessons...</p>}>
+      <TutorialView category={category} />
+    </Suspense>
+  );
 }

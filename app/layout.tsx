@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import StudyAgent from "@/components/agent/StudyAgent";
 import { AppProvider } from "@/context/AppProvider";
 import { projectManager, themeVariablesCss } from "@/config/projectmanager";
 import "./globals.css";
@@ -44,7 +45,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground antialiased">
         <style dangerouslySetInnerHTML={{ __html: themeVariablesCss() }} />
         <GoogleAnalytics />
-        <AppProvider>{children}</AppProvider>
+        <AppProvider>
+          {children}
+          <StudyAgent />
+        </AppProvider>
       </body>
     </html>
   );
