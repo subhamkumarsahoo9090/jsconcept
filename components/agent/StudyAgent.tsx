@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { primaryButtonClass } from "@/components/ui/classes";
+import { notifyAgentActive, onAgentActiveChange, readAgentActive } from "@/lib/agentActive";
 import { onGroqKeyChange, readGroqKey, readGroqModel } from "@/lib/groqKey";
 
 type ChatMessage = {
@@ -57,6 +58,7 @@ export default function StudyAgent() {
   const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
   const [active, setActive] = useState(false);
+  const [minimized, setMinimized] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -75,10 +77,17 @@ export default function StudyAgent() {
     setApiKey(readGroqKey());
     setModel(readGroqModel());
     setHydrated(true);
-    return onGroqKeyChange(() => {
+    const stopKeys = onGroqKeyChange(() => {
       setApiKey(readGroqKey());
       setModel(readGroqModel());
     });
+    const stopActive = onAgentActiveChange(() => {
+      setActive(readAgentActive());
+    });
+    return () => {
+      stopKeys();
+      stopActive();
+    };
   }, []);
 
   useEffect(() => {
@@ -87,6 +96,7 @@ export default function StudyAgent() {
       SESSION_KEY,
       JSON.stringify({ active, messages: messages.slice(-40) }),
     );
+    notifyAgentActive();
   }, [active, hydrated, messages]);
 
   useEffect(() => {
@@ -109,10 +119,9 @@ export default function StudyAgent() {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages, pending]);
 
-  function deactivate() {
-    setActive(false);
-    setPending(false);
-  }
+  useEffect(() => {
+    if (!active) setMinimized(false);
+  }, [active]);
 
   async function runTurn(prior: ChatMessage[], content: string) {
     if (content.toLowerCase() === "clear") {
@@ -181,14 +190,14 @@ export default function StudyAgent() {
     void runTurn(messages.slice(0, editingIndex), content);
   }
 
-  if (!hydrated) return null;
+  if (!hydrated || !active) return null;
 
-  if (!active) {
+  if (minimized) {
     return (
       <button
         type="button"
         className={`${primaryButtonClass} fixed right-4 bottom-4 z-40 shadow-lg`}
-        onClick={() => setActive(true)}
+        onClick={() => setMinimized(false)}
       >
         Study agent
       </button>
@@ -207,9 +216,9 @@ export default function StudyAgent() {
         <button
           type="button"
           className="rounded-full px-3 py-1.5 text-sm text-muted hover:bg-surface"
-          onClick={deactivate}
+          onClick={() => setMinimized(true)}
         >
-          Deactivate
+          Minimize
         </button>
       </header>
       {needsKey ? (

@@ -3,7 +3,7 @@ import "server-only";
 export const projectManager = {
   app: {
     name: "JsExport",
-    logo: "/logo.svg",
+    logo: "/favicon.ico",
     description:
       "Short lessons for JavaScript, Node.js, React, Next.js, React Native, MongoDB, and Mongoose. Every lesson is in English and in Hindi written with English letters.",
   },

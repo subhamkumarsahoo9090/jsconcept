@@ -15,7 +15,7 @@ export function interviewLibrary(): Library {
     slug: "interview",
     title: "Interview",
     summary:
-      "Short interview answers for each topic, in English and in Hindi written with English letters.",
+      "Pick a concept, answer 10 interview questions, then check your score.",
     accent: "#7c3aed",
     tabs: [],
     lessons: [

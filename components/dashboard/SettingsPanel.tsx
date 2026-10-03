@@ -8,6 +8,7 @@ import {
   primaryButtonClass,
   secondaryButtonClass,
 } from "@/components/ui/classes";
+import { onAgentActiveChange, readAgentActive, writeAgentActive } from "@/lib/agentActive";
 import {
   readGroqKeys,
   readGroqModels,
@@ -111,10 +112,13 @@ export default function SettingsPanel() {
   const [keys, setKeys] = useState<ChoiceList>({ options: [], selected: "" });
   const [models, setModels] = useState<ChoiceList>({ options: [], selected: "" });
   const [serverKey, setServerKey] = useState(false);
+  const [agentOn, setAgentOn] = useState(false);
 
   useEffect(() => {
     setKeys(readGroqKeys());
     setModels(readGroqModels());
+    setAgentOn(readAgentActive());
+    const stopActive = onAgentActiveChange(() => setAgentOn(readAgentActive()));
     let cancelled = false;
     fetch("/api/agent")
       .then((response) => response.json())
@@ -126,6 +130,7 @@ export default function SettingsPanel() {
       });
     return () => {
       cancelled = true;
+      stopActive();
     };
   }, []);
 
@@ -149,6 +154,30 @@ export default function SettingsPanel() {
           </a>
           .
         </p>
+        <div className="mt-5">
+          <p className={labelClass}>Agent</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              className={agentOn ? primaryButtonClass : secondaryButtonClass}
+              onClick={() => writeAgentActive(true)}
+            >
+              Active
+            </button>
+            <button
+              type="button"
+              className={agentOn ? secondaryButtonClass : primaryButtonClass}
+              onClick={() => writeAgentActive(false)}
+            >
+              Deactive
+            </button>
+          </div>
+          <p className="mt-2 text-sm text-muted">
+            {agentOn
+              ? "The study agent is open on every page."
+              : "The study agent stays hidden until you set it to Active."}
+          </p>
+        </div>
         {serverKey ? (
           <p className="mt-3 text-sm text-muted">
             A server key exists as a backup. A key selected here is used first.

@@ -1,7 +1,9 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import InterviewView from "@/components/dashboard/InterviewView";
 import TutorialView from "@/components/dashboard/TutorialView";
+import { interviewTopics } from "@/lib/interview/topics";
 import { readLibraries } from "@/lib/libraryStore";
 
 export const dynamic = "force-dynamic";
@@ -28,12 +30,17 @@ export default async function TutorialPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const category = (await readLibraries()).find((library) => library.slug === slug);
+  const libraries = await readLibraries();
+  const category = libraries.find((library) => library.slug === slug);
   if (!category) notFound();
 
   return (
     <Suspense fallback={<p className="text-sm text-muted">Loading lessons...</p>}>
-      <TutorialView category={category} />
+      {category.slug === "interview" ? (
+        <InterviewView category={category} topics={interviewTopics(libraries)} />
+      ) : (
+        <TutorialView category={category} />
+      )}
     </Suspense>
   );
 }
