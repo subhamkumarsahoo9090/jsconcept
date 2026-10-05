@@ -30,13 +30,13 @@ export default function SideNav({
       {sidebarOpen ? (
         <button
           type="button"
-          className="fixed inset-0 z-30 bg-black/40 md:hidden"
+          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
           aria-label="Close menu"
           onClick={() => setSidebarOpen(false)}
         />
       ) : null}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex h-dvh w-72 shrink-0 flex-col border-r border-border bg-surface transition-transform md:sticky md:top-0 md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex h-dvh w-72 shrink-0 flex-col border-r border-border bg-surface transition-transform lg:sticky lg:top-0 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

@@ -50,7 +50,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <button
               type="button"
-              className="inline-flex shrink-0 flex-col justify-center gap-1 md:hidden"
+              className="inline-flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-1 rounded-xl hover:bg-surface lg:hidden"
               aria-label="Open menu"
               aria-expanded={sidebarOpen}
               onClick={toggleSidebar}
