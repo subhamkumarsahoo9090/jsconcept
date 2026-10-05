@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import StudyAgent from "@/components/agent/StudyAgent";
+import RegisterServiceWorker from "@/components/pwa/RegisterServiceWorker";
 import { AppProvider } from "@/context/AppProvider";
 import { projectManager, themeVariablesCss } from "@/config/projectmanager";
 import "./globals.css";
@@ -14,6 +15,15 @@ export const metadata: Metadata = {
     template: `%s | ${projectManager.app.name}`,
   },
   description: projectManager.app.description,
+  applicationName: projectManager.app.name,
+  appleWebApp: {
+    capable: true,
+    title: projectManager.app.name,
+    statusBarStyle: "default",
+  },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+  },
   icons: {
     icon: [
       { url: "/favicon_io/favicon.ico" },
@@ -45,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground antialiased">
         <style dangerouslySetInnerHTML={{ __html: themeVariablesCss() }} />
         <GoogleAnalytics />
+        <RegisterServiceWorker />
         <AppProvider>
           {children}
           <StudyAgent />

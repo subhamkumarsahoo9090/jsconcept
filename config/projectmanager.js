@@ -16,7 +16,7 @@ export const projectManager = {
       text: "#1c1917",
       muted: "#78716c",
       border: "#e6dfd2",
-      danger: "#dc2626",
+      danger: "#dc2626", 
     },
     components: {
       button: {
