@@ -19,6 +19,7 @@ import {
   primaryButtonClass,
   secondaryButtonClass,
 } from "@/components/ui/classes";
+import { useEditMode } from "@/lib/editMode";
 
 function LessonFields({
   lesson,
@@ -255,6 +256,7 @@ export function LessonCard({
   index: number;
 }) {
   const [editing, setEditing] = useState(false);
+  const canEdit = useEditMode();
 
   return (
     <li className="overflow-hidden rounded-3xl border border-border bg-background shadow-sm">
@@ -265,18 +267,20 @@ export function LessonCard({
           </p>
           <h2 className="mt-1 text-xl font-semibold">{lesson.title}</h2>
         </div>
-        <div className="flex shrink-0 gap-1">
-          <button
-            type="button"
-            className="rounded-full px-3 py-1.5 text-sm font-medium text-primary hover:bg-surface"
-            onClick={() => setEditing((open) => !open)}
-          >
-            {editing ? "Close" : "Edit"}
-          </button>
-          <DeleteLessonButton libraryId={libraryId} lessonId={lesson.id} />
-        </div>
+        {canEdit ? (
+          <div className="flex shrink-0 gap-1">
+            <button
+              type="button"
+              className="rounded-full px-3 py-1.5 text-sm font-medium text-primary hover:bg-surface"
+              onClick={() => setEditing((open) => !open)}
+            >
+              {editing ? "Close" : "Edit"}
+            </button>
+            <DeleteLessonButton libraryId={libraryId} lessonId={lesson.id} />
+          </div>
+        ) : null}
       </div>
-      {editing ? (
+      {canEdit && editing ? (
         <LessonEditor
           libraryId={libraryId}
           lesson={lesson}

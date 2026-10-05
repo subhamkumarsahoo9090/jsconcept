@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DeleteLibraryButton from "@/components/dashboard/DeleteLibraryButton";
 import { useApp } from "@/context/AppProvider";
+import { useEditMode } from "@/lib/editMode";
 
 type LibraryBar = {
   id: string;
@@ -29,6 +30,7 @@ export function useLibraryBar(bar: LibraryBar | null) {
 
 export default function DashboardShell({ children }: { children: ReactNode }) {
   const { user, ready, sidebarOpen, toggleSidebar, logout } = useApp();
+  const canEdit = useEditMode();
   const router = useRouter();
   const [libraryBar, setLibraryBar] = useState<LibraryBar | null>(null);
 
@@ -86,16 +88,20 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
                   >
                     All libraries
                   </Link>
-                  <button
-                    type="button"
-                    className="rounded-full px-3 py-1.5 text-sm font-medium text-primary hover:bg-surface"
-                    onClick={libraryBar.onToggleEdit}
-                  >
-                    {libraryBar.editing ? "Close" : "Edit library"}
-                  </button>
-                  {libraryBar.slug === "interview" ? null : (
-                    <DeleteLibraryButton id={libraryBar.id} label="Delete library" />
-                  )}
+                  {canEdit ? (
+                    <>
+                      <button
+                        type="button"
+                        className="rounded-full px-3 py-1.5 text-sm font-medium text-primary hover:bg-surface"
+                        onClick={libraryBar.onToggleEdit}
+                      >
+                        {libraryBar.editing ? "Close" : "Edit library"}
+                      </button>
+                      {libraryBar.slug === "interview" ? null : (
+                        <DeleteLibraryButton id={libraryBar.id} label="Delete library" />
+                      )}
+                    </>
+                  ) : null}
                 </>
               ) : null}
               <p className="hidden truncate text-sm text-muted sm:block">{user.email}</p>

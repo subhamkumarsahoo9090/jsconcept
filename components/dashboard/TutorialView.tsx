@@ -6,10 +6,12 @@ import ConceptTabs from "@/components/dashboard/ConceptTabs";
 import LibraryForm from "@/components/dashboard/LibraryForm";
 import { AddLessonForm, LessonCard } from "@/components/dashboard/LessonForm";
 import { useLibraryBar } from "@/components/layout/DashboardShell";
+import { useEditMode } from "@/lib/editMode";
 import type { Library } from "@/lib/libraryTypes";
 
 export default function TutorialView({ category }: { category: Library }) {
   const [editing, setEditing] = useState(false);
+  const canEdit = useEditMode();
   const [activeTabId, setActiveTabId] = useState(category.tabs[0]?.id ?? "");
   const tabCount = useRef(category.tabs.length);
   const searchParams = useSearchParams();
@@ -60,9 +62,13 @@ export default function TutorialView({ category }: { category: Library }) {
   );
   useLibraryBar(libraryBar);
 
+  useEffect(() => {
+    if (!canEdit) setEditing(false);
+  }, [canEdit]);
+
   return (
     <div className="w-full">
-      {editing ? (
+      {canEdit && editing ? (
         <div className="mt-6 rounded-3xl border border-border bg-background p-5">
           <LibraryForm
             library={category}
@@ -77,13 +83,15 @@ export default function TutorialView({ category }: { category: Library }) {
         activeId={activeTabId}
         onChange={setActiveTabId}
         extra={
-          <AddLessonForm
-            key={activeTabId}
-            libraryId={category.id}
-            tabs={category.tabs}
-            activeTabId={activeTabId}
-            inline
-          />
+          canEdit ? (
+            <AddLessonForm
+              key={activeTabId}
+              libraryId={category.id}
+              tabs={category.tabs}
+              activeTabId={activeTabId}
+              inline
+            />
+          ) : null
         }
       />
       <ol className="mt-6 flex flex-col gap-6">

@@ -9,6 +9,7 @@ import {
   secondaryButtonClass,
 } from "@/components/ui/classes";
 import { onAgentActiveChange, readAgentActive, writeAgentActive } from "@/lib/agentActive";
+import { onEditModeChange, readEditMode, writeEditMode } from "@/lib/editMode";
 import { readStoredGroqKeys, saveStoredGroqKeys } from "@/lib/groqActions";
 import {
   readGroqKeys,
@@ -114,12 +115,15 @@ export default function SettingsPanel() {
   const [models, setModels] = useState<ChoiceList>({ options: [], selected: "" });
   const [serverKey, setServerKey] = useState(false);
   const [agentOn, setAgentOn] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [keyError, setKeyError] = useState("");
 
   useEffect(() => {
     setModels(readGroqModels());
     setAgentOn(readAgentActive());
+    setEditMode(readEditMode());
     const stopActive = onAgentActiveChange(() => setAgentOn(readAgentActive()));
+    const stopEdit = onEditModeChange(() => setEditMode(readEditMode()));
     let cancelled = false;
     const localKeys = readGroqKeys();
     readStoredGroqKeys()
@@ -153,6 +157,7 @@ export default function SettingsPanel() {
     return () => {
       cancelled = true;
       stopActive();
+      stopEdit();
     };
   }, []);
 
@@ -211,6 +216,30 @@ export default function SettingsPanel() {
             {agentOn
               ? "The study agent is open on every page."
               : "The study agent stays hidden until you set it to Active."}
+          </p>
+        </div>
+        <div className="mt-5">
+          <p className={labelClass}>Edit mode</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              className={editMode ? primaryButtonClass : secondaryButtonClass}
+              onClick={() => writeEditMode(true)}
+            >
+              On
+            </button>
+            <button
+              type="button"
+              className={editMode ? secondaryButtonClass : primaryButtonClass}
+              onClick={() => writeEditMode(false)}
+            >
+              Off
+            </button>
+          </div>
+          <p className="mt-2 text-sm text-muted">
+            {editMode
+              ? "Add, edit, and delete are visible."
+              : "Pages are read only. Add, edit, and delete stay hidden."}
           </p>
         </div>
         {serverKey ? (

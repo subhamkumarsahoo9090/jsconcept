@@ -20,6 +20,7 @@ import {
   primaryButtonClass,
   secondaryButtonClass,
 } from "@/components/ui/classes";
+import { useEditMode } from "@/lib/editMode";
 
 export default function ConceptTabs({
   libraryId,
@@ -61,6 +62,7 @@ export default function ConceptTabs({
   const matches = needle
     ? tabs.filter((tab) => tab.title.toLowerCase().includes(needle))
     : tabs;
+  const canEdit = useEditMode();
 
   useEffect(() => {
     if (!open) return;
@@ -158,6 +160,7 @@ export default function ConceptTabs({
             </div>
           ) : null}
         </div>
+        {canEdit ? (
         <div className="flex flex-wrap items-center gap-1">
           <button
             type="button"
@@ -223,8 +226,9 @@ export default function ConceptTabs({
           )}
           {extra}
         </div>
+        ) : null}
       </div>
-      {adding ? (
+      {canEdit && adding ? (
         <form
           ref={createRef}
           action={createFormAction}

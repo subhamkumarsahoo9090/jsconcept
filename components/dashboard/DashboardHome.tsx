@@ -6,14 +6,16 @@ import DeleteLibraryButton from "@/components/dashboard/DeleteLibraryButton";
 import LibraryForm from "@/components/dashboard/LibraryForm";
 import { primaryButtonClass } from "@/components/ui/classes";
 import { useApp } from "@/context/AppProvider";
+import { useEditMode } from "@/lib/editMode";
 import type { Library } from "@/lib/libraryTypes";
 
 function LibraryCard({ library }: { library: Library }) {
   const [editing, setEditing] = useState(false);
+  const canEdit = useEditMode();
 
   return (
     <li className="rounded-2xl border border-border bg-background p-5 shadow-sm">
-      {editing ? (
+      {canEdit && editing ? (
         <LibraryForm
           library={library}
           submitLabel="Save library"
@@ -39,14 +41,18 @@ function LibraryCard({ library }: { library: Library }) {
               {library.lessons.length} lessons
             </Link>
             <div className="flex gap-1">
-              <button
-                type="button"
-                className="rounded-full px-3 py-1.5 text-sm font-medium text-primary hover:bg-surface"
-                onClick={() => setEditing(true)}
-              >
-                Edit
-              </button>
-              <DeleteLibraryButton id={library.id} />
+              {canEdit ? (
+                <>
+                  <button
+                    type="button"
+                    className="rounded-full px-3 py-1.5 text-sm font-medium text-primary hover:bg-surface"
+                    onClick={() => setEditing(true)}
+                  >
+                    Edit
+                  </button>
+                  <DeleteLibraryButton id={library.id} />
+                </>
+              ) : null}
             </div>
           </div>
         </>
@@ -100,6 +106,7 @@ function AddLibraryDialog() {
 
 export default function DashboardHome({ libraries }: { libraries: Library[] }) {
   const { user } = useApp();
+  const canEdit = useEditMode();
 
   if (!user) return null;
 
@@ -110,10 +117,11 @@ export default function DashboardHome({ libraries }: { libraries: Library[] }) {
         Welcome, {user.name}
       </h1>
       <p className="mt-3 max-w-2xl text-sm text-muted">
-        Add a library, then open it to create, edit, or delete lessons. Every
-        change is saved in data/library.json.
+        {canEdit
+          ? "Add a library, then open it to create, edit, or delete lessons. Every change is saved in data/library.json."
+          : "Open a library to read the lessons. Turn on Edit mode in Settings to add or change anything."}
       </p>
-      <AddLibraryDialog />
+      {canEdit ? <AddLibraryDialog /> : null}
       <ul className="mt-6 grid gap-4 sm:grid-cols-2">
         {libraries
           .filter((library) => library.slug !== "interview")

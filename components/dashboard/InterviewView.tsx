@@ -13,6 +13,7 @@ import {
 import { mergeHistory, readHistory, readSession, writeSession } from "@/lib/interview/storage";
 import type { HistoryEntry, InterviewTopic, QuizQuestion, QuizSession } from "@/lib/interview/types";
 import { readGroqKey, readGroqModel } from "@/lib/groqKey";
+import { useEditMode } from "@/lib/editMode";
 import type { Library } from "@/lib/libraryTypes";
 
 function historyFrom(topic: InterviewTopic, session: QuizSession): HistoryEntry[] {
@@ -50,6 +51,7 @@ export default function InterviewView({
   topics: InterviewTopic[];
 }) {
   const [editing, setEditing] = useState(false);
+  const canEdit = useEditMode();
   const [topicId, setTopicId] = useState("");
   const [session, setSession] = useState<QuizSession | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -85,6 +87,10 @@ export default function InterviewView({
     [category.id, category.title, category.summary, category.accent, category.slug, editing],
   );
   useLibraryBar(libraryBar);
+
+  useEffect(() => {
+    if (!canEdit) setEditing(false);
+  }, [canEdit]);
 
   useEffect(() => {
     const savedHistory = readHistory();
@@ -288,7 +294,7 @@ export default function InterviewView({
 
   return (
     <div className="w-full">
-      {editing ? (
+      {canEdit && editing ? (
         <div className="mt-6 rounded-3xl border border-border bg-background p-5">
           <LibraryForm
             library={category}
