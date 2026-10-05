@@ -3,12 +3,15 @@ import {
   explainInterviewQuestion,
   gradeInterviewAnswers,
 } from "@/lib/interview/runInterview";
+import { readStoredGroqKeys } from "@/lib/groqStore";
 
 export const dynamic = "force-dynamic";
 
-function apiKeyFrom(request: Request) {
+async function apiKeyFrom(request: Request) {
   const header = request.headers.get("x-groq-key")?.trim() ?? "";
   if (header.length >= 20 && header.length <= 200 && !/[\r\n]/.test(header)) return header;
+  const stored = (await readStoredGroqKeys()).selected;
+  if (stored) return stored;
   return process.env.GROQ_API_KEY?.trim() ?? "";
 }
 
@@ -30,7 +33,7 @@ function friendly(error: unknown) {
 }
 
 export async function POST(request: Request) {
-  const apiKey = apiKeyFrom(request);
+  const apiKey = await apiKeyFrom(request);
   if (!apiKey) {
     return Response.json(
       { error: "Add a free Groq API key in Settings before starting an interview." },

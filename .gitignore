@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# Groq key saved from Settings
+/data/groq.json
+
 # vercel
 .vercel
 

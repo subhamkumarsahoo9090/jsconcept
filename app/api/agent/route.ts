@@ -1,10 +1,13 @@
 import { runAgent, type AgentMessage } from "@/lib/agent/runAgent";
+import { readStoredGroqKeys } from "@/lib/groqStore";
 
 export const dynamic = "force-dynamic";
 
-function apiKeyFrom(request: Request) {
+async function apiKeyFrom(request: Request) {
   const header = request.headers.get("x-groq-key")?.trim() ?? "";
   if (header.length >= 20 && header.length <= 200 && !/[\r\n]/.test(header)) return header;
+  const stored = (await readStoredGroqKeys()).selected;
+  if (stored) return stored;
   return process.env.GROQ_API_KEY?.trim() ?? "";
 }
 
@@ -32,11 +35,13 @@ function messagesFrom(value: unknown): AgentMessage[] | null {
 }
 
 export async function GET() {
-  return Response.json({ configured: Boolean(process.env.GROQ_API_KEY?.trim()) });
+  const stored = Boolean((await readStoredGroqKeys()).selected);
+  const env = Boolean(process.env.GROQ_API_KEY?.trim());
+  return Response.json({ configured: stored || env, env });
 }
 
 export async function POST(request: Request) {
-  const apiKey = apiKeyFrom(request);
+  const apiKey = await apiKeyFrom(request);
   if (!apiKey) {
     return Response.json(
       { error: "Add a free Groq API key to chat with the study agent." },

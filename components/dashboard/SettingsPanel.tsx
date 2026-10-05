@@ -9,6 +9,7 @@ import {
   secondaryButtonClass,
 } from "@/components/ui/classes";
 import { onAgentActiveChange, readAgentActive, writeAgentActive } from "@/lib/agentActive";
+import { readStoredGroqKeys, saveStoredGroqKeys } from "@/lib/groqActions";
 import {
   readGroqKeys,
   readGroqModels,
@@ -113,17 +114,38 @@ export default function SettingsPanel() {
   const [models, setModels] = useState<ChoiceList>({ options: [], selected: "" });
   const [serverKey, setServerKey] = useState(false);
   const [agentOn, setAgentOn] = useState(false);
+  const [keyError, setKeyError] = useState("");
 
   useEffect(() => {
-    setKeys(readGroqKeys());
     setModels(readGroqModels());
     setAgentOn(readAgentActive());
     const stopActive = onAgentActiveChange(() => setAgentOn(readAgentActive()));
     let cancelled = false;
+    const localKeys = readGroqKeys();
+    readStoredGroqKeys()
+      .then(async (stored) => {
+        if (cancelled) return;
+        if (stored.options.length > 0) {
+          setKeys(stored);
+          saveGroqKeys(stored);
+          return;
+        }
+        if (localKeys.options.length > 0) {
+          const saved = await saveStoredGroqKeys(localKeys);
+          if (cancelled) return;
+          setKeys(saved);
+          saveGroqKeys(saved);
+          return;
+        }
+        setKeys(localKeys);
+      })
+      .catch(() => {
+        if (!cancelled) setKeys(localKeys);
+      });
     fetch("/api/agent")
       .then((response) => response.json())
-      .then((data: { configured?: boolean }) => {
-        if (!cancelled) setServerKey(data.configured === true);
+      .then((data: { env?: boolean }) => {
+        if (!cancelled) setServerKey(data.env === true);
       })
       .catch(() => {
         if (!cancelled) setServerKey(false);
@@ -134,6 +156,19 @@ export default function SettingsPanel() {
     };
   }, []);
 
+  async function saveKeys(next: ChoiceList) {
+    setKeys(next);
+    saveGroqKeys(next);
+    setKeyError("");
+    try {
+      const saved = await saveStoredGroqKeys(next);
+      setKeys(saved);
+      saveGroqKeys(saved);
+    } catch {
+      setKeyError("The key could not be saved in data/groq.json.");
+    }
+  }
+
   return (
     <div className="w-full">
       <h1 className="text-3xl font-semibold tracking-tight">Settings</h1>
@@ -143,7 +178,7 @@ export default function SettingsPanel() {
       <div className="mt-8 max-w-xl rounded-3xl border border-border bg-background p-5 sm:p-6">
         <h2 className="text-lg font-semibold">Study agent</h2>
         <p className="mt-2 text-sm text-muted">
-          Keys stay in this browser. Get a free key from{" "}
+          Keys are saved in data/groq.json inside this app. Get a free key from{" "}
           <a
             className="font-medium text-primary hover:underline"
             href="https://console.groq.com/keys"
@@ -188,8 +223,8 @@ export default function SettingsPanel() {
           label="GROQ_API_KEY"
           hint={
             keys.selected
-              ? "The selected key is the one the agent uses."
-              : "Add a key, then pick it in the dropdown."
+              ? "The selected key is saved in data/groq.json and is the one the agent uses."
+              : "Add a key, then pick it in the dropdown. It is stored in data/groq.json."
           }
           list={keys}
           placeholder="Paste a new Groq API key"
@@ -198,10 +233,14 @@ export default function SettingsPanel() {
             value.length < 20 || value.length > 200 ? "Paste the full Groq API key." : ""
           }
           onChange={(next) => {
-            setKeys(next);
-            saveGroqKeys(next);
+            void saveKeys(next);
           }}
         />
+        {keyError ? (
+          <p className={`${errorClass} mt-2`} role="alert">
+            {keyError}
+          </p>
+        ) : null}
         <ChoiceField
           id="groq-model"
           label="GROQ_MODEL"
