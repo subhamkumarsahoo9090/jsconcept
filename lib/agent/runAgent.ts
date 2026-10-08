@@ -2,12 +2,27 @@ import "server-only";
 
 import {
   cleanPath,
+  currentScreen,
   describePage,
   loadLibraries,
   navigationCatalog,
   resolveAppPath,
 } from "@/lib/agent/pages";
 import type { Library } from "@/lib/libraryTypes";
+import { createAgentLibrary, libraryNameFrom } from "@/lib/agent/createLibrary";
+import {
+  addAgentLine,
+  conceptNameFrom,
+  confirmNote,
+  createAgentConcept,
+  detachConcept,
+  isNo,
+  isYes,
+  libraryFromContext,
+  lineRequestFrom,
+  mentionedConcept,
+  pendingNote,
+} from "@/lib/agent/editLibrary";
 import { saveStudyNote, type NoteInput } from "@/lib/agent/saveNote";
 import { searchOpenSources } from "@/lib/agent/search";
 
@@ -21,6 +36,7 @@ type AgentJson = {
   navigate?: unknown;
   search?: unknown;
   saveNote?: NoteInput | null;
+  createLibrary?: unknown;
 };
 
 const DEFAULT_MODEL = "openai/gpt-oss-20b";
@@ -175,18 +191,23 @@ async function complete(
   return parseAgentJson(payload.choices?.[0]?.message?.content ?? "");
 }
 
-function instructions(catalog: string, page: string, locked: string) {
+function instructions(catalog: string, page: string, screen: string, locked: string) {
   return [
     "You are the study agent inside this lesson app. Reply in the language the student used. Hindi may be written in English letters.",
-    "Return only a JSON object with keys reply, navigate, search, and saveNote.",
+    "CURRENT SCREEN is the page open right now. If the student asks where they are, answer only from CURRENT SCREEN.",
+    "Never say a note, concept, or library was saved or created. The app does that itself.",
+    "Return only a JSON object with keys reply, navigate, search, saveNote, and createLibrary.",
+    "createLibrary is null unless the student asks to create a library. Then set it to the library name only, such as my notes, and set navigate to null.",
     "reply is the chat text. When navigate is set, reply is only one short sentence, such as Opened Node.js. Do not copy the lesson into the chat, because the page already shows it.",
     "When navigate is null and the student asks about the open page, explain from PAGE in short paragraphs with one small example.",
     "navigate is an exact path from NAV, or null. For a concept use /dashboard/slug?tab=TAB_ID.",
     "search is a short public-web query, or null. Set it only after the student says the page explanation was not enough.",
-    "saveNote is null unless the student asks to save a note. Then set librarySlug, tabTitle, and a short title. Keep english and hindi to two short paragraphs. Put one short example in code. reply must be one sentence, never the note itself and never JSON.",
+    "saveNote stays null. Do not save a note from this reply. If the student did not name a concept, the app asks them to confirm the open concept.",
     "Teach from PAGE first. Do not claim the page says something that is not in PAGE.",
     "When search results are supplied later, explain them in your own words, give two different examples, and include the source links. Do not paste long quotations.",
     locked,
+    "CURRENT SCREEN",
+    screen,
     "NAV",
     catalog,
     "PAGE",
@@ -204,14 +225,178 @@ export async function runAgent(input: {
   const libraries = await loadLibraries();
   const catalog = navigationCatalog(libraries);
   const page = describePage(libraries, input.pathname, input.tab);
+  const screen = currentScreen(libraries, input.pathname, input.tab);
+  const screenText = screen.library
+    ? `Library: ${screen.library.title}\nConcept: ${screen.concept?.title ?? "none"}`
+    : screen.label;
   const history = input.messages.slice(-8);
   const model = input.model || DEFAULT_MODEL;
+  const lastUserEarly = [...history].reverse().find((message) => message.role === "user");
+  const previousAssistant = [...history].reverse().find((message) => message.role === "assistant");
+  const pending = previousAssistant ? pendingNote(previousAssistant.content) : null;
+  const freshRequest = lastUserEarly
+    ? lineRequestFrom(lastUserEarly.content).asked ||
+      libraryNameFrom(lastUserEarly.content).asked ||
+      conceptNameFrom(lastUserEarly.content).asked
+    : false;
+  if (pending && lastUserEarly && !freshRequest) {
+    const library = libraries.find(
+      (item) => item.title.toLowerCase() === pending.libraryTitle.toLowerCase(),
+    );
+    const typed = lastUserEarly.content.trim().replace(/^(?:concept|tab)\s+/i, "");
+    const namedTab = library?.tabs.find((tab) => tab.title.toLowerCase() === typed.toLowerCase());
+    const answering =
+      isYes(lastUserEarly.content) ||
+      isNo(lastUserEarly.content) ||
+      Boolean(namedTab) ||
+      typed.split(/\s+/).filter(Boolean).length <= 2;
+    if (library && answering) {
+    if (isNo(lastUserEarly.content)) {
+      return { reply: "Okay. I did not write the note.", navigate: null, saved: null };
+    }
+    const chosen = isYes(lastUserEarly.content)
+      ? library.tabs.find((tab) => tab.title.toLowerCase() === pending.conceptTitle.toLowerCase())
+      : namedTab;
+    if (!chosen) {
+      const names = library.tabs.map((tab) => tab.title).join(", ");
+      return {
+        reply: `That concept is not in ${library.title}. Concepts: ${names}.\n\n${confirmNote(library.title, pending.conceptTitle, pending.line)}`,
+        navigate: null,
+        saved: null,
+      };
+    }
+    const line = await addAgentLine(library.id, chosen.title, pending.line);
+    if (!line.ok) return { reply: line.error, navigate: null, saved: null };
+    return {
+      reply: line.added
+        ? `Added "${line.line}" inside ${line.title}.`
+        : `"${line.line}" is already inside ${line.title}.`,
+      navigate: line.path,
+      saved: { library: line.library, tab: line.title, path: line.path },
+    };
+    }
+  }
+  const namedLibrary = lastUserEarly ? libraryNameFrom(lastUserEarly.content) : { asked: false, title: "" };
+  if (namedLibrary.asked) {
+    if (!namedLibrary.title) {
+      return {
+        reply: "Tell me the library name. For example: create a library named my notes.",
+        navigate: null,
+        saved: null,
+      };
+    }
+    const created = await createAgentLibrary(namedLibrary.title);
+    if (!created.ok) {
+      return { reply: created.error, navigate: null, saved: null };
+    }
+    return {
+      reply: created.created
+        ? `Created the library ${created.title}.`
+        : `The library ${created.title} is already there, so I opened it.`,
+      navigate: created.path,
+      saved: { library: created.title, tab: "Basics", path: created.path },
+    };
+  }
+  if (lastUserEarly) {
+    const conceptRequest = conceptNameFrom(lastUserEarly.content);
+    const lineRequest = lineRequestFrom(lastUserEarly.content);
+    if (conceptRequest.asked || lineRequest.asked) {
+      const library =
+        lineRequest.asked && !conceptRequest.asked
+          ? screen.library
+          : libraryFromContext(libraries, input.pathname, history);
+      if (!library) {
+        return {
+          reply: lineRequest.asked
+            ? `You are on ${screen.label}. Open the library and concept where the note should go, or tell me the library and concept.`
+            : "Open a library first, or create one. For example: create a library named my notes.",
+          navigate: null,
+          saved: null,
+        };
+      }
+      if (conceptRequest.asked && !lineRequest.asked) {
+        if (!conceptRequest.title) {
+          return {
+            reply: "Tell me the concept name. For example: create a concept important.",
+            navigate: null,
+            saved: null,
+          };
+        }
+        const concept = await createAgentConcept(library.id, conceptRequest.title);
+        if (!concept.ok) return { reply: concept.error, navigate: null, saved: null };
+        return {
+          reply: concept.created
+            ? `Created the concept ${concept.title}.`
+            : `The concept ${concept.title} is already there, so I opened it.`,
+          navigate: concept.path,
+          saved: { library: concept.library, tab: concept.title, path: concept.path },
+        };
+      }
+      const placed = detachConcept(lineRequest.line, library);
+      const explicit =
+        lineRequest.concept || placed.concept || mentionedConcept(lastUserEarly.content, library);
+      let noteText = placed.line;
+      if (!noteText) {
+        const earlier = [...history]
+          .reverse()
+          .find((message) => message.role === "assistant" && !pendingNote(message.content));
+        noteText = earlier?.content.replace(/\s+/g, " ").trim().slice(0, 500) ?? "";
+      }
+      if (!noteText) {
+        return {
+          reply: "Tell me the note text. For example: add a note i love my india.",
+          navigate: null,
+          saved: null,
+        };
+      }
+      if (!explicit) {
+        const openConcept = screen.library?.id === library.id ? screen.concept : null;
+        if (!openConcept) {
+          return {
+            reply: `You are on ${library.title}. Tell me which concept should get the note.`,
+            navigate: null,
+            saved: null,
+          };
+        }
+        return {
+          reply: confirmNote(library.title, openConcept.title, noteText),
+          navigate: null,
+          saved: null,
+        };
+      }
+      const line = await addAgentLine(library.id, explicit, noteText);
+      if (!line.ok) return { reply: line.error, navigate: null, saved: null };
+      const reply = line.added
+        ? `Added "${line.line}" inside ${line.title}.`
+        : `"${line.line}" is already inside ${line.title}.`;
+      return {
+        reply,
+        navigate: line.path,
+        saved: { library: line.library, tab: line.title, path: line.path },
+      };
+    }
+  }
   const first = await complete(
     input.apiKey,
     model,
-    instructions(catalog, page, "You may set navigate or search on this turn."),
+    instructions(catalog, page, screenText, "You may set navigate or search on this turn."),
     history,
   );
+
+  const modelLibraryName = asText(first.createLibrary);
+  if (modelLibraryName) {
+    const created = await createAgentLibrary(modelLibraryName);
+    if (!created.ok) {
+      return { reply: created.error, navigate: null, saved: null };
+    }
+    return {
+      reply: created.created
+        ? `Created the library ${created.title}.`
+        : `The library ${created.title} is already there, so I opened it.`,
+      navigate: created.path,
+      saved: { library: created.title, tab: "Basics", path: created.path },
+    };
+  }
 
   const requested = asText(first.navigate);
   const destination = requested ? resolveAppPath(libraries, requested) : null;
@@ -226,6 +411,7 @@ export async function runAgent(input: {
       instructions(
         catalog,
         page,
+        screenText,
         `Do not set search or navigate. Open references:\n${sources}`,
       ),
       history,
@@ -255,26 +441,34 @@ export async function runAgent(input: {
       ? modelNote
       : builtNote;
   let saved: { library: string; tab: string; path: string } | null = null;
-  if (lastUser && wantsNote(lastUser.content) && note && anchor) {
+  const namedConcept = screen.library ? mentionedConcept(lastUser?.content ?? "", screen.library) : "";
+  if (lastUser && wantsNote(lastUser.content) && !namedConcept) {
+    const noteText = (asText(note?.english) || previousAnswer?.content || lastUser.content)
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 500);
+    if (screen.library && screen.concept && noteText) {
+      return {
+        reply: confirmNote(screen.library.title, screen.concept.title, noteText),
+        navigate: null,
+        saved: null,
+      };
+    }
+    reply = `You are on ${screen.label}. Open a library concept, or tell me the concept name, before I write the note.`;
+    navigate = null;
+  } else if (lastUser && wantsNote(lastUser.content) && note && anchor && namedConcept) {
     const result = await saveStudyNote({
       ...note,
       librarySlug: anchor.librarySlug,
-      tabTitle: anchor.tabTitle,
+      tabTitle: namedConcept,
       afterLessonId: anchor.afterLessonId,
     });
     if (result.ok) {
       saved = { library: result.library, tab: result.tab, path: result.path };
-      reply = `Saved the note below ${anchor.lessonTitle}.`;
+      reply = `Saved the note in ${result.library}, ${result.tab}.`;
       navigate = result.path;
     } else {
       reply = `I could not save the note. ${result.error}`;
-    }
-  } else if (note && typeof note === "object" && asText(note.title) && !destination) {
-    const result = await saveStudyNote(note);
-    if (result.ok) {
-      saved = { library: result.library, tab: result.tab, path: result.path };
-      reply = `Saved the note in ${result.library}, ${result.tab}.`;
-      navigate = result.path;
     }
   }
   if (reply.trim().startsWith("{")) {

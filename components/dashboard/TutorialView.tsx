@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ConceptTabs from "@/components/dashboard/ConceptTabs";
 import LibraryForm from "@/components/dashboard/LibraryForm";
 import { AddLessonForm, LessonCard } from "@/components/dashboard/LessonForm";
 import { useLibraryBar } from "@/components/layout/DashboardShell";
 import { useEditMode } from "@/lib/editMode";
+import { writeOpenScreen } from "@/lib/openScreen";
 import type { Library } from "@/lib/libraryTypes";
 
 export default function TutorialView({ category }: { category: Library }) {
@@ -14,6 +15,7 @@ export default function TutorialView({ category }: { category: Library }) {
   const canEdit = useEditMode();
   const [activeTabId, setActiveTabId] = useState(category.tabs[0]?.id ?? "");
   const tabCount = useRef(category.tabs.length);
+  const router = useRouter();
   const searchParams = useSearchParams();
   const requestedTab = searchParams.get("tab");
 
@@ -37,6 +39,26 @@ export default function TutorialView({ category }: { category: Library }) {
     }
     tabCount.current = category.tabs.length;
   }, [category.tabs, activeTabId, requestedTab]);
+
+  useEffect(() => {
+    const tab = category.tabs.find((item) => item.id === activeTabId);
+    writeOpenScreen({
+      pathname: `/dashboard/${category.slug}`,
+      libraryTitle: category.title,
+      tabId: activeTabId,
+      tabTitle: tab?.title ?? "",
+    });
+    if (activeTabId) {
+      const params = new URLSearchParams(searchParams.toString());
+      if (params.get("tab") !== activeTabId) {
+        params.set("tab", activeTabId);
+        router.replace(`/dashboard/${category.slug}?${params.toString()}`, { scroll: false });
+      }
+    }
+    return () => {
+      writeOpenScreen({ pathname: "", libraryTitle: "", tabId: "", tabTitle: "" });
+    };
+  }, [activeTabId, category.slug, category.tabs, category.title, router, searchParams]);
 
   const visibleLessons = category.lessons.filter(
     (lesson) => lesson.tabId === activeTabId,

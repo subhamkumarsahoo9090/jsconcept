@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { primaryButtonClass } from "@/components/ui/classes";
 import { notifyAgentActive, onAgentActiveChange, readAgentActive } from "@/lib/agentActive";
 import { onGroqKeyChange, readGroqKey, readGroqModel } from "@/lib/groqKey";
+import { onOpenScreenChange, readOpenScreen } from "@/lib/openScreen";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -13,6 +14,23 @@ type ChatMessage = {
 };
 
 const SESSION_KEY = "jsexport.agent";
+
+function screenCaption(
+  pathname: string,
+  open: { pathname: string; libraryTitle: string; tabTitle: string },
+) {
+  if (open.pathname === pathname && open.libraryTitle) {
+    return open.tabTitle
+      ? `On ${open.libraryTitle}, concept ${open.tabTitle}`
+      : `On ${open.libraryTitle}`;
+  }
+  if (pathname === "/") return "On Home";
+  if (pathname === "/login") return "On Log in";
+  if (pathname === "/dashboard") return "On All libraries";
+  if (pathname === "/dashboard/settings") return "On Settings";
+  if (pathname === "/dashboard/interview") return "On Interview";
+  return "On this page";
+}
 
 function visibleReply(reply: string, navigated: boolean) {
   const trimmed = reply.trim();
@@ -66,9 +84,11 @@ export default function StudyAgent() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [serverKey, setServerKey] = useState(false);
+  const [openScreen, setOpenScreen] = useState(readOpenScreen);
   const [apiKey, setApiKey] = useState("");
   const [model, setModel] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
+  const turnRef = useRef(0);
 
   useEffect(() => {
     const stored = readSession();
@@ -84,9 +104,11 @@ export default function StudyAgent() {
     const stopActive = onAgentActiveChange(() => {
       setActive(readAgentActive());
     });
+    const stopScreen = onOpenScreenChange(() => setOpenScreen(readOpenScreen()));
     return () => {
       stopKeys();
       stopActive();
+      stopScreen();
     };
   }, []);
 
@@ -123,15 +145,23 @@ export default function StudyAgent() {
     if (!active) setMinimized(false);
   }, [active]);
 
+  function clearChat() {
+    turnRef.current += 1;
+    setMessages([]);
+    setDraft("");
+    setEditDraft("");
+    setEditingIndex(null);
+    setError("");
+    setPending(false);
+  }
+
   async function runTurn(prior: ChatMessage[], content: string) {
     if (content.toLowerCase() === "clear") {
-      setMessages([]);
-      setDraft("");
-      setEditDraft("");
-      setEditingIndex(null);
-      setError("");
+      clearChat();
       return;
     }
+    const turn = turnRef.current + 1;
+    turnRef.current = turn;
     const history = [...prior, { role: "user" as const, content }];
     setMessages(history);
     setDraft("");
@@ -140,7 +170,11 @@ export default function StudyAgent() {
     setError("");
     setPending(true);
     try {
-      const tab = new URLSearchParams(window.location.search).get("tab") ?? "";
+      const open = readOpenScreen();
+      const tab =
+        open.pathname === pathname && open.tabId
+          ? open.tabId
+          : (new URLSearchParams(window.location.search).get("tab") ?? "");
       const response = await fetch("/api/agent", {
         method: "POST",
         headers: {
@@ -156,6 +190,7 @@ export default function StudyAgent() {
         navigate?: string | null;
         saved?: { path?: string } | null;
       };
+      if (turn !== turnRef.current) return;
       if (!response.ok || !data.reply) {
         setError(data.error || "The study agent could not answer.");
         return;
@@ -170,17 +205,28 @@ export default function StudyAgent() {
       if (data.navigate) router.push(data.navigate);
       if (data.saved) router.refresh();
     } catch {
-      setError("The study agent could not reach Groq.");
+      if (turn === turnRef.current) setError("The study agent could not reach Groq.");
     } finally {
-      setPending(false);
+      if (turn === turnRef.current) setPending(false);
     }
+  }
+
+  function submitDraft() {
+    const content = draft.trim();
+    if (!content || pending) return;
+    void runTurn(messages, content);
   }
 
   function send(event: React.FormEvent) {
     event.preventDefault();
-    const content = draft.trim();
-    if (!content || pending) return;
-    void runTurn(messages, content);
+    submitDraft();
+  }
+
+  function onDraftKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      submitDraft();
+    }
   }
 
   function sendEdit() {
@@ -211,15 +257,26 @@ export default function StudyAgent() {
       <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
         <div>
           <h2 className="text-sm font-semibold">Study agent</h2>
-          <p className="text-xs text-muted">Stays open while you change pages</p>
+          <p className="text-xs text-muted">{screenCaption(pathname, openScreen)}</p>
         </div>
-        <button
-          type="button"
-          className="rounded-full px-3 py-1.5 text-sm text-muted hover:bg-surface"
-          onClick={() => setMinimized(true)}
-        >
-          Minimize
-        </button>
+        <div className="flex shrink-0 items-center gap-1">
+          {messages.length > 0 ? (
+            <button
+              type="button"
+              className="rounded-full px-3 py-1.5 text-sm text-muted hover:bg-surface"
+              onClick={clearChat}
+            >
+              Clear
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className="rounded-full px-3 py-1.5 text-sm text-muted hover:bg-surface"
+            onClick={() => setMinimized(true)}
+          >
+            Minimize
+          </button>
+        </div>
       </header>
       {needsKey ? (
         <p className="border-b border-border px-4 py-3 text-sm text-muted">
@@ -299,13 +356,15 @@ export default function StudyAgent() {
           {error}
         </p>
       ) : null}
-      <form className="flex gap-2 border-t border-border p-3" onSubmit={send}>
-        <input
+      <form className="flex items-end gap-2 border-t border-border p-3" onSubmit={send}>
+        <textarea
           value={draft}
+          rows={2}
           onChange={(event) => setDraft(event.target.value)}
+          onKeyDown={onDraftKeyDown}
           placeholder="Ask about this page"
           disabled={needsKey || pending}
-          className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+          className="max-h-36 min-h-10 min-w-0 flex-1 resize-none overflow-y-auto rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
         />
         <button type="submit" disabled={needsKey || pending} className={primaryButtonClass}>
           Send

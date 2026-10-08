@@ -58,6 +58,41 @@ export function resolveAppPath(libraries: Library[], input: string) {
   return `${parsed.pathname}?tab=${encodeURIComponent(tab.id)}`;
 }
 
+export function currentScreen(libraries: Library[], pathname: string, tab = "") {
+  const parsed = cleanPath(pathname) ?? { pathname: "/", tab: "" };
+  const requestedTab = tab || parsed.tab;
+  if (parsed.pathname === "/") {
+    return { label: "Home", library: null, concept: null };
+  }
+  if (parsed.pathname === "/login") {
+    return { label: "Log in", library: null, concept: null };
+  }
+  if (parsed.pathname === "/dashboard") {
+    return { label: "All libraries", library: null, concept: null };
+  }
+  if (parsed.pathname === "/dashboard/settings") {
+    return { label: "Settings", library: null, concept: null };
+  }
+
+  const slug = parsed.pathname.startsWith("/dashboard/")
+    ? decodeURIComponent(parsed.pathname.slice("/dashboard/".length))
+    : "";
+  const library = libraries.find((item) => item.slug === slug) ?? null;
+  if (!library) return { label: "this page", library: null, concept: null };
+  const concept =
+    library.tabs.find(
+      (item) =>
+        item.id === requestedTab ||
+        item.title.toLowerCase() === requestedTab.toLowerCase(),
+    ) ??
+    library.tabs[0] ??
+    null;
+  const label = concept
+    ? `${library.title}, concept ${concept.title}`
+    : library.title;
+  return { label, library, concept };
+}
+
 export function describePage(libraries: Library[], pathname: string, tab = "") {
   const parsed = cleanPath(pathname) ?? { pathname: "/", tab: "" };
   const requestedTab = tab || parsed.tab;
