@@ -190,9 +190,11 @@ async function finishLibraries(libraries: Library[]) {
   return next;
 }
 
+const HIDDEN_COOKIE = "jsexport.hiddenLibraries";
+
 let pendingRead: Promise<Library[]> | null = null;
 
-export function readLibraries() {
+function readLibraryFile() {
   if (!pendingRead) {
     pendingRead = loadLibraries().finally(() => {
       pendingRead = null;
@@ -201,11 +203,53 @@ export function readLibraries() {
   return pendingRead;
 }
 
+function hiddenIdsFrom(value: string | undefined) {
+  const ids = new Set<string>();
+  for (const part of (value ?? "").split(",")) {
+    const id = part.trim();
+    if (/^[0-9a-f-]{8,80}$/i.test(id)) ids.add(id);
+  }
+  return ids;
+}
+
+async function hiddenLibraryIds() {
+  try {
+    const { cookies } = await import("next/headers");
+    const jar = await cookies();
+    return hiddenIdsFrom(jar.get(HIDDEN_COOKIE)?.value);
+  } catch {
+    return new Set<string>();
+  }
+}
+
+export async function hideLibrary(id: string) {
+  const { cookies } = await import("next/headers");
+  const jar = await cookies();
+  const ids = hiddenIdsFrom(jar.get(HIDDEN_COOKIE)?.value);
+  ids.add(id);
+  jar.set(HIDDEN_COOKIE, [...ids].slice(-40).join(","), {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 400,
+  });
+}
+
+export function readLibraries() {
+  return readLibraryFile().then(async (libraries) => {
+    const hidden = await hiddenLibraryIds();
+    if (hidden.size === 0) return libraries;
+    return libraries.filter(
+      (library) => library.slug === "interview" || !hidden.has(library.id),
+    );
+  });
+}
+
 export async function updateLibraries(
   change: (libraries: Library[]) => Library[] | Promise<Library[]>,
 ) {
   const run = writeQueue.then(async () => {
-    const libraries = await readLibraries();
+    const libraries = await readLibraryFile();
     const next = await change(libraries);
     await saveLibraries(next);
     return next;

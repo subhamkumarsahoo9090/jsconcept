@@ -2,6 +2,7 @@ import "server-only";
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { normalizeGroqKey } from "@/lib/groqKey";
 
 const filePath = path.join(process.cwd(), "data", "groq.json");
 
@@ -11,9 +12,7 @@ export type StoredGroqKeys = {
 };
 
 function cleanKey(value: string) {
-  const key = value.trim();
-  if (key.length < 20 || key.length > 200 || /[\r\n]/.test(key)) return "";
-  return key;
+  return normalizeGroqKey(value);
 }
 
 function normalize(value: unknown): StoredGroqKeys {

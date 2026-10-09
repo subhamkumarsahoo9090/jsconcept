@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import {
   readAccent,
   readField,
+  hideLibrary,
   readLibraries,
   uniqueSlug,
   updateLibraries,
@@ -104,15 +105,34 @@ export async function updateLibrary(
   return { error: null, savedAt: Date.now() };
 }
 
-export async function deleteLibrary(id: string) {
-  const current = (await readLibraries()).find((library) => library.id === id);
-  if (current?.slug === "interview") return;
+function isReadOnlyFs(error: unknown) {
+  const code =
+    typeof error === "object" && error !== null && "code" in error
+      ? String((error as { code: unknown }).code)
+      : "";
+  const message = error instanceof Error ? error.message : "";
+  return code === "EROFS" || code === "EACCES" || /read-only file system|EROFS/i.test(message);
+}
 
-  await updateLibraries(async (libraries) =>
-    libraries.filter((library) => library.id !== id),
-  );
+export async function deleteLibrary(id: string): Promise<ActionState> {
+  const current = (await readLibraries()).find((library) => library.id === id);
+  if (!current) return { error: null, savedAt: Date.now() };
+  if (current.slug === "interview") {
+    return { error: "Interview cannot be deleted.", savedAt: 0 };
+  }
+
+  try {
+    await updateLibraries(async (libraries) =>
+      libraries.filter((library) => library.id !== id),
+    );
+  } catch (error) {
+    if (!isReadOnlyFs(error)) {
+      return { error: "Could not delete that library.", savedAt: 0 };
+    }
+    await hideLibrary(id);
+  }
   refreshLibraryViews();
-  redirect("/dashboard");
+  return { error: null, savedAt: Date.now() };
 }
 
 export async function createLesson(

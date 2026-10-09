@@ -12,6 +12,7 @@ import { onAgentActiveChange, readAgentActive, writeAgentActive } from "@/lib/ag
 import { onEditModeChange, readEditMode, writeEditMode } from "@/lib/editMode";
 import { readStoredGroqKeys, saveStoredGroqKeys } from "@/lib/groqActions";
 import {
+  normalizeGroqKey,
   readGroqKeys,
   readGroqModels,
   saveGroqKeys,
@@ -259,10 +260,18 @@ export default function SettingsPanel() {
           placeholder="Paste a new Groq API key"
           mask={maskKey}
           validate={(value) =>
-            value.length < 20 || value.length > 200 ? "Paste the full Groq API key." : ""
+            normalizeGroqKey(value)
+              ? ""
+              : "Paste the full Groq key from console.groq.com. It starts with gsk_."
           }
           onChange={(next) => {
-            void saveKeys(next);
+            const options = [...new Set(next.options.map(normalizeGroqKey).filter(Boolean))];
+            void saveKeys({
+              options,
+              selected: options.includes(normalizeGroqKey(next.selected))
+                ? normalizeGroqKey(next.selected)
+                : (options[0] ?? ""),
+            });
           }}
         />
         {keyError ? (

@@ -150,12 +150,29 @@ function openedLabel(libraries: Library[], destination: string) {
   return tab ? `${library.title}, ${tab.title}` : library.title;
 }
 
-async function complete(
-  apiKey: string,
-  model: string,
-  system: string,
-  messages: AgentMessage[],
-) {
+export class GroqError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+  }
+}
+
+function groqMessage(payload: { error?: { message?: string } | string }, status: number) {
+  if (typeof payload.error === "string" && payload.error.trim()) return payload.error.trim();
+  if (payload.error && typeof payload.error === "object" && payload.error.message) {
+    return payload.error.message;
+  }
+  if (status === 401) return "Invalid API key";
+  return "Groq could not answer.";
+}
+
+function modelProblem(error: GroqError) {
+  return error.status === 404 || /model|decommissioned|does not exist|not found/i.test(error.message);
+}
+
+async function requestGroq(apiKey: string, model: string, system: string, messages: AgentMessage[]) {
   const body = {
     model,
     temperature: 0.3,
@@ -170,7 +187,7 @@ async function complete(
     },
     body: JSON.stringify({ ...body, response_format: { type: "json_object" } }),
   });
-  if (response.status === 400) {
+  if (response.status === 400 || response.status === 422) {
     response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -180,15 +197,30 @@ async function complete(
       body: JSON.stringify(body),
     });
   }
-  const payload = (await response.json()) as {
-    error?: { message?: string };
+  const payload = (await response.json().catch(() => ({}))) as {
+    error?: { message?: string } | string;
     choices?: Array<{ message?: { content?: string | null } }>;
   };
-  if (!response.ok) {
-    const message = payload.error?.message || "Groq could not answer.";
-    throw new Error(message);
-  }
+  if (!response.ok) throw new GroqError(response.status, groqMessage(payload, response.status));
   return parseAgentJson(payload.choices?.[0]?.message?.content ?? "");
+}
+
+async function complete(apiKeys: string[], model: string, system: string, messages: AgentMessage[]) {
+  const models = model === DEFAULT_MODEL ? [model] : [model, DEFAULT_MODEL];
+  let lastError: GroqError | null = null;
+  for (const apiKey of apiKeys) {
+    for (const chosen of models) {
+      try {
+        return await requestGroq(apiKey, chosen, system, messages);
+      } catch (error) {
+        if (!(error instanceof GroqError)) throw error;
+        lastError = error;
+        if (error.status === 401) break;
+        if (!modelProblem(error)) throw error;
+      }
+    }
+  }
+  throw lastError ?? new GroqError(502, "Groq could not answer.");
 }
 
 function instructions(catalog: string, page: string, screen: string, locked: string) {
@@ -216,7 +248,7 @@ function instructions(catalog: string, page: string, screen: string, locked: str
 }
 
 export async function runAgent(input: {
-  apiKey: string;
+  apiKeys: string[];
   model: string;
   messages: AgentMessage[];
   pathname: string;
@@ -377,7 +409,7 @@ export async function runAgent(input: {
     }
   }
   const first = await complete(
-    input.apiKey,
+    input.apiKeys,
     model,
     instructions(catalog, page, screenText, "You may set navigate or search on this turn."),
     history,
@@ -406,7 +438,7 @@ export async function runAgent(input: {
   if (asText(first.search) && !destination) {
     const sources = await searchOpenSources(asText(first.search));
     parsed = await complete(
-      input.apiKey,
+      input.apiKeys,
       model,
       instructions(
         catalog,

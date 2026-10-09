@@ -98,7 +98,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
                         {libraryBar.editing ? "Close" : "Edit library"}
                       </button>
                       {libraryBar.slug === "interview" ? null : (
-                        <DeleteLibraryButton id={libraryBar.id} label="Delete library" />
+                        <DeleteLibraryButton id={libraryBar.id} label="Delete library" leavePage />
                       )}
                     </>
                   ) : null}

@@ -135,7 +135,7 @@ export default function InterviewView({
         ...(apiKey ? { "x-groq-key": apiKey } : {}),
         ...(model ? { "x-groq-model": model } : {}),
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...body, groqKey: apiKey, groqModel: model }),
     });
     const data = (await response.json()) as { error?: string };
     if (!response.ok) throw new Error(data.error || "The interviewer could not continue.");

@@ -7,9 +7,18 @@ const CHANGE_EVENT = "jsexport-groq-key";
 export const DEFAULT_GROQ_MODELS = [
   "openai/gpt-oss-20b",
   "openai/gpt-oss-120b",
-  "qwen/qwen3.6-27b",
   "qwen/qwen3.8-27b",
 ];
+
+export function normalizeGroqKey(value: string) {
+  const key = value
+    .trim()
+    .replace(/^\uFEFF/, "")
+    .replace(/^["'`]+|["'`]+$/g, "")
+    .replace(/^bearer\s+/i, "")
+    .replace(/\s+/g, "");
+  return /^gsk_[A-Za-z0-9_-]{16,240}$/.test(key) ? key : "";
+}
 
 export type ChoiceList = {
   options: string[];

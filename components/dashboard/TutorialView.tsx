@@ -18,6 +18,7 @@ export default function TutorialView({ category }: { category: Library }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedTab = searchParams.get("tab");
+  const tabKey = category.tabs.map((tab) => tab.id).join("|");
 
   useEffect(() => {
     if (requestedTab) {
@@ -38,7 +39,7 @@ export default function TutorialView({ category }: { category: Library }) {
       setActiveTabId(category.tabs[0]?.id ?? "");
     }
     tabCount.current = category.tabs.length;
-  }, [category.tabs, activeTabId, requestedTab]);
+  }, [activeTabId, category.tabs, requestedTab]);
 
   useEffect(() => {
     const tab = category.tabs.find((item) => item.id === activeTabId);
@@ -48,17 +49,15 @@ export default function TutorialView({ category }: { category: Library }) {
       tabId: activeTabId,
       tabTitle: tab?.title ?? "",
     });
-    if (activeTabId) {
-      const params = new URLSearchParams(searchParams.toString());
-      if (params.get("tab") !== activeTabId) {
-        params.set("tab", activeTabId);
-        router.replace(`/dashboard/${category.slug}?${params.toString()}`, { scroll: false });
-      }
-    }
-    return () => {
-      writeOpenScreen({ pathname: "", libraryTitle: "", tabId: "", tabTitle: "" });
-    };
-  }, [activeTabId, category.slug, category.tabs, category.title, router, searchParams]);
+  }, [activeTabId, category.slug, category.title, tabKey, category.tabs]);
+
+  function selectTab(id: string) {
+    setActiveTabId(id);
+    const params = new URLSearchParams(searchParams.toString());
+    if (params.get("tab") === id) return;
+    params.set("tab", id);
+    router.replace(`/dashboard/${category.slug}?${params.toString()}`, { scroll: false });
+  }
 
   const visibleLessons = category.lessons.filter(
     (lesson) => lesson.tabId === activeTabId,
@@ -103,7 +102,7 @@ export default function TutorialView({ category }: { category: Library }) {
         libraryId={category.id}
         tabs={category.tabs}
         activeId={activeTabId}
-        onChange={setActiveTabId}
+        onChange={selectTab}
         extra={
           canEdit ? (
             <AddLessonForm

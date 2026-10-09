@@ -3,16 +3,17 @@ import {
   explainInterviewQuestion,
   gradeInterviewAnswers,
 } from "@/lib/interview/runInterview";
+import { normalizeGroqKey } from "@/lib/groqKey";
 import { readStoredGroqKeys } from "@/lib/groqStore";
 
 export const dynamic = "force-dynamic";
 
-async function apiKeyFrom(request: Request) {
-  const header = request.headers.get("x-groq-key")?.trim() ?? "";
-  if (header.length >= 20 && header.length <= 200 && !/[\r\n]/.test(header)) return header;
+async function apiKeyFrom(request: Request, record: Record<string, unknown>) {
+  const bodyKey = typeof record.groqKey === "string" ? record.groqKey : "";
+  const header = request.headers.get("x-groq-key") ?? "";
   const stored = (await readStoredGroqKeys()).selected;
-  if (stored) return stored;
-  return process.env.GROQ_API_KEY?.trim() ?? "";
+  const env = process.env.GROQ_API_KEY ?? "";
+  return [bodyKey, header, stored, env].map(normalizeGroqKey).find(Boolean) ?? "";
 }
 
 function modelFrom(request: Request) {
@@ -27,20 +28,14 @@ function friendly(error: unknown) {
     /gsk_[A-Za-z0-9_-]+/g,
     "gsk_hidden",
   );
-  if (/api key|invalid/i.test(message)) return "Groq rejected the API key. Paste a free key from console.groq.com.";
+  if (/invalid api key|incorrect api key/i.test(message)) {
+    return "Groq rejected the API key. Paste a free key from console.groq.com. It starts with gsk_.";
+  }
   if (/rate|limit|429/i.test(message)) return "The free Groq limit was reached. Wait a minute and try again.";
   return message.slice(0, 240);
 }
 
 export async function POST(request: Request) {
-  const apiKey = await apiKeyFrom(request);
-  if (!apiKey) {
-    return Response.json(
-      { error: "Add a free Groq API key in Settings before starting an interview." },
-      { status: 400 },
-    );
-  }
-
   let body: unknown;
   try {
     body = await request.json();
@@ -48,6 +43,13 @@ export async function POST(request: Request) {
     return Response.json({ error: "The interview request could not be read." }, { status: 400 });
   }
   const record = body && typeof body === "object" ? (body as Record<string, unknown>) : {};
+  const apiKey = await apiKeyFrom(request, record);
+  if (!apiKey) {
+    return Response.json(
+      { error: "Add a free Groq API key in Settings before starting an interview. It starts with gsk_." },
+      { status: 400 },
+    );
+  }
   const topicId = typeof record.topicId === "string" ? record.topicId.slice(0, 200) : "";
   if (!topicId.includes(":")) {
     return Response.json({ error: "Choose a concept first." }, { status: 400 });

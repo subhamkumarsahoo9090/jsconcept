@@ -3175,19 +3175,5 @@
         "title": "Indexes"
       }
     ]
-  },
-  {
-    "id": "17e6aace-3ce4-4353-b2d2-90ea0e3710e4",
-    "slug": "my-notes",
-    "title": "my notes",
-    "summary": "A library for my notes.",
-    "accent": "#0f766e",
-    "tabs": [
-      {
-        "id": "4ce89f07-72e8-4549-bde1-4f36baf4f151",
-        "title": "Basics"
-      }
-    ],
-    "lessons": []
   }
 ]

@@ -182,7 +182,13 @@ export default function StudyAgent() {
           ...(apiKey ? { "x-groq-key": apiKey } : {}),
           ...(model ? { "x-groq-model": model } : {}),
         },
-        body: JSON.stringify({ messages: history.slice(-12), pathname, tab }),
+        body: JSON.stringify({
+          messages: history.slice(-12),
+          pathname,
+          tab,
+          groqKey: apiKey,
+          groqModel: model,
+        }),
       });
       const data = (await response.json()) as {
         error?: string;
